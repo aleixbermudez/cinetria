@@ -5,8 +5,9 @@
 
 @section('content')
 
-    <div id="contenedor">
+    <div id="container">
         @include('components.navbar')
+        @include('components.icon-section')
     </div>
 
     
