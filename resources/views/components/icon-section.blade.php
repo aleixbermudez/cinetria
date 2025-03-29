@@ -7,8 +7,8 @@
         <svg class="shrink-0 size-6 text-white" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="10" height="14" x="3" y="8" rx="2"/><path d="M5 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2h-2.4"/><path d="M8 18h.01"/></svg>
       </div>
       <div class="mt-5">
-        <h3 class="group-hover:text-gray-600 text-lg font-semibold text-gray-800 dark:text-white dark:group-hover:text-gray-400">PC / Móvil</h3>
-        <p class="mt-1 text-gray-600 dark:text-neutral-400">Lee, debate y publica desde tu móvil o ordenador.</p>
+        <h3 class="group-hover:text-gray-600 text-lg font-semibold text-gray-800 dark:text-white dark:group-hover:text-gray-400">PC, Tablet, Móvil...</h3>
+        <p class="mt-1 text-gray-600 dark:text-neutral-400">Lee, debate y publica desde cualquier dispositivo.</p>
       </div>
     </a>
     <!-- End Icon Block -->
@@ -20,7 +20,7 @@
       </div>
       <div class="mt-5">
         <h3 class="group-hover:text-gray-600 text-lg font-semibold text-gray-800 dark:text-white dark:group-hover:text-gray-400">Tu perfil</h3>
-        <p class="mt-1 text-gray-600 dark:text-neutral-400">Crea listas de tus gustos y tus películas o series favoritas.</p>
+        <p class="mt-1 text-gray-600 dark:text-neutral-400">Crea tu lista de favoritos y modificala cuando quieras.</p>
       </div>
     </a>
     <!-- End Icon Block -->
@@ -32,7 +32,7 @@
       </div>
       <div class="mt-5">
         <h3 class="group-hover:text-gray-600 text-lg font-semibold text-gray-800 dark:text-white dark:group-hover:text-gray-400">Reseñas</h3>
-        <p class="mt-1 text-gray-600 dark:text-neutral-400">Lee las reseñas y las opiniones de tus amigos.</p>
+        <p class="mt-1 text-gray-600 dark:text-neutral-400">Escribe reseñas de películas o series, puntúalas y escribe tu propia opinión</p>
       </div>
     </a>
     <!-- End Icon Block -->
@@ -44,7 +44,7 @@
       </div>
       <div class="mt-5">
         <h3 class="group-hover:text-gray-600 text-lg font-semibold text-gray-800 dark:text-white dark:group-hover:text-gray-400">Foro</h3>
-        <p class="mt-1 text-gray-600 dark:text-neutral-400">Debate sobre tus peliculas favoritas.</p>
+        <p class="mt-1 text-gray-600 dark:text-neutral-400">Consulta reseñas y perfiles de otros usuarios.</p>
       </div>
     </a>
     <!-- End Icon Block -->

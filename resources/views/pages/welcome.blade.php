@@ -7,7 +7,7 @@
 
     <div id="container">
         @include('components.navbar')
-        <div class="pt-5">
+        <div class="pt-5 ">
             @include('components.hero-home')
         </div>
         <div class="pt-5">
@@ -15,9 +15,6 @@
         </div>
         <div class="pt-5">
             @include('components.icon-section')
-        </div>
-        <div class="pt-5">
-            @include('components.faq-section')
         </div>
         <div class="pt-20">
             @include('components.footer')
