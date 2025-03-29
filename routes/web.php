@@ -7,6 +7,10 @@ Route::get('/', function () {
     return view('pages.welcome');
 });
 
+Route::get('/sobre-cinetria', function () {
+    return view('pages.sobre-cinetria');
+})->name('sobre-cinetria');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
