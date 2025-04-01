@@ -40,10 +40,10 @@
           <a class="inline-block text-black hover:text-yellow-600 focus:outline-hidden focus:text-gray-600 dark:text-white dark:hover:text-neutral-300 dark:focus:text-neutral-300" href="/">Inicio</a>
         </div>
         <div>
-          <a class="inline-block text-black hover:text-yellow-600 focus:outline-hidden focus:text-gray-600 dark:text-white dark:hover:text-neutral-300 dark:focus:text-neutral-300" href="#">Peliculas</a>
+          <a class="inline-block text-black hover:text-yellow-600 focus:outline-hidden focus:text-gray-600 dark:text-white dark:hover:text-neutral-300 dark:focus:text-neutral-300" href="/peliculas">Peliculas</a>
         </div>
         <div>
-          <a class="inline-block text-black hover:text-yellow-600 focus:outline-hidden focus:text-gray-600 dark:text-white dark:hover:text-neutral-300 dark:focus:text-neutral-300" href="#">Series</a>
+          <a class="inline-block text-black hover:text-yellow-600 focus:outline-hidden focus:text-gray-600 dark:text-white dark:hover:text-neutral-300 dark:focus:text-neutral-300" href="/series">Series</a>
         </div>
         <div>
           <a class="inline-block text-black hover:text-yellow-600 focus:outline-hidden focus:text-gray-600 dark:text-white dark:hover:text-neutral-300 dark:focus:text-neutral-300" href="/sobre-cinetria">Sobre Cinetria</a>
