@@ -6,10 +6,13 @@
 @section('content')
 
 
-    <div id="container flex justify-center items-center">
+    <div id="container flex justify-center items-center w-full">
         @include('components.navbar')
-        @include('components.portada')
+        <div class="container mx-auto">
+            @include('components.portada')
+        </div>
         @include('components.sliders')
+        @include('components.filtrador_generos')
         <div class="pt-20">
             @include('components.footer')
         </div>

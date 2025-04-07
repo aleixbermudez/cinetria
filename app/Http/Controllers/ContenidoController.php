@@ -17,12 +17,14 @@ class ContenidoController extends Controller
         // Obtener datos desde la API
         $mejores = $this->mejorContenido($tipoApi);
         $populares = $this->contenidoPopulares($tipoApi);
+        $generos = $this->obtenerGeneros($tipoApi);
+
 
         // devolver la vista con los datos obtenidos
-        return view('pages.contenido', compact('tipo','mejores', 'populares'));
+        return view('pages.contenido', compact('tipo','mejores', 'populares', 'generos'));
     }
 
-    // Funcion que hace la llamada a la API segun la url que se le pase
+    // Metodo que hace la llamada a la API segun la url que se le pase
     private function obtenerContenidoDesdeAPI($url)
     {
         //require_once('vendor/autoload.php');
@@ -39,7 +41,7 @@ class ContenidoController extends Controller
         return json_decode($response->getBody(), true);
     }
 
-    // Funciones que hacen la llamada a la API para obtener los mejores y populares
+    // Metodos que hacen la llamada a la API para obtener los mejores y populares
     private function mejorContenido($tipo)
     {
         $url = "https://api.themoviedb.org/3/{$tipo}/top_rated?language=es-ES&page=1";
@@ -50,6 +52,25 @@ class ContenidoController extends Controller
     {
         $url = "https://api.themoviedb.org/3/{$tipo}/popular?language=es-ES&page=1";
         return $this->obtenerContenidoDesdeAPI($url);
+    }
+
+    // Metodo para obtener los géneros desde la API
+    private function obtenerGeneros($tipo)
+    {
+        $url = "https://api.themoviedb.org/3/genre/{$tipo}/list?language=es-ES";
+        return $this->obtenerContenidoDesdeAPI($url);
+    }
+
+    // Metodo para obtener el contenido por género
+    public function obtenerPeliculasPorGenero(Request $request)
+    {
+        $tipo = $request->input('tipo', 'movie');
+        $generos = $request->input('generos', '');
+        $pagina = $request->input('pagina', 1);
+
+        $url = "https://api.themoviedb.org/3/discover/{$tipo}?language=es-ES&with_genres={$generos}&page={$pagina}&sort_by=popularity.desc&include_adult=false";
+
+        return response()->json($this->obtenerContenidoDesdeAPI($url));
     }
 
 }

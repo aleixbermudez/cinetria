@@ -15,7 +15,7 @@
                     <td class="border border-gray-300 px-4 py-2 text-center">
                         <img src="https://image.tmdb.org/t/p/w200{{$popular['poster_path']}}" 
                              alt="{{$popular['title'] ?? $popular['name']}}" 
-                             class="w-16 h-auto mx-auto">
+                             class="w-10 h-auto mx-auto">
                     </td>
                     <td class="border border-gray-300 px-4 py-2">{{$popular['title'] ?? $popular['name']}}</td>
                     <td class="border border-gray-300 px-4 py-2 text-center">{{$popular['vote_average']}}</td>
@@ -43,7 +43,7 @@
                     <td class="border border-gray-300 px-4 py-2 text-center">
                         <img src="https://image.tmdb.org/t/p/w200{{$mejor['poster_path']}}" 
                              alt="{{$mejor['title'] ?? $mejor['name']}}" 
-                             class="w-16 h-auto mx-auto">
+                             class="w-10 h-auto mx-auto">
                     </td>
                     <td class="border border-gray-300 px-4 py-2">{{$mejor['title'] ?? $mejor['name']}}</td>
                     <td class="border border-gray-300 px-4 py-2 text-center">{{$mejor['vote_average']}}</td>

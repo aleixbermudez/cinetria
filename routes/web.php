@@ -23,5 +23,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/{tipo}', [ContenidoController::class, 'abrirPagina'])->name('contenido');
+Route::get('/peliculas-por-genero', [ContenidoController::class, 'obtenerPeliculasPorGenero']);
 
 require __DIR__.'/auth.php';
