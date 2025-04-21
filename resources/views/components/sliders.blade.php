@@ -1,56 +1,76 @@
-<h3 class="text-center">POPULARES</h3>
-<div class="slider-contenido flex justify-center items-center py-6">
-    <table class="table-auto border-collapse border border-gray-300 shadow-lg">
-        <thead>
-            <tr class="bg-gray-200">
-                <th class="border border-gray-300 px-4 py-2">Imagen</th>
-                <th class="border border-gray-300 px-4 py-2">Título</th>
-                <th class="border border-gray-300 px-4 py-2">Valoración</th>
-                <th class="border border-gray-300 px-4 py-2">ID</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($populares["results"] as $popular)
-                <tr class="hover:bg-gray-100">
-                    <td class="border border-gray-300 px-4 py-2 text-center">
-                        <img src="https://image.tmdb.org/t/p/w200{{$popular['poster_path']}}" 
-                             alt="{{$popular['title'] ?? $popular['name']}}" 
-                             class="w-10 h-auto mx-auto">
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">{{$popular['title'] ?? $popular['name']}}</td>
-                    <td class="border border-gray-300 px-4 py-2 text-center">{{$popular['vote_average']}}</td>
-                    <td class="border border-gray-300 px-4 py-2 text-center">{{$popular['id']}}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
-<h3 class="text-center">MEJORES</h3>
-<div class="slider-contenido flex justify-center items-center py-6">
-
-    <table class="table-auto border-collapse border border-gray-300 shadow-lg">
-        <thead>
-            <tr class="bg-gray-200">
-                <th class="border border-gray-300 px-4 py-2">Imagen</th>
-                <th class="border border-gray-300 px-4 py-2">Título</th>
-                <th class="border border-gray-300 px-4 py-2">Valoración</th>
-                <th class="border border-gray-300 px-4 py-2">ID</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($mejores["results"] as $mejor)
-                <tr class="hover:bg-gray-100">
-                    <td class="border border-gray-300 px-4 py-2 text-center">
-                        <img src="https://image.tmdb.org/t/p/w200{{$mejor['poster_path']}}" 
-                             alt="{{$mejor['title'] ?? $mejor['name']}}" 
-                             class="w-10 h-auto mx-auto">
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">{{$mejor['title'] ?? $mejor['name']}}</td>
-                    <td class="border border-gray-300 px-4 py-2 text-center">{{$mejor['vote_average']}}</td>
-                    <td class="border border-gray-300 px-4 py-2 text-center">{{$mejor['id']}}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+<!-- POPULARES -->
+<h3 class="text-center text-xl font-bold mt-8">POPULARES</h3>
+<div class="swiper populares-slider mt-4 px-6">
+    <div class="swiper-wrapper">
+        @foreach($populares["results"] as $popular)
+            <div class="swiper-slide bg-white rounded-lg shadow-md p-4 text-center w-72">
+                <img src="https://image.tmdb.org/t/p/w200{{$popular['poster_path']}}" 
+                     alt="{{$popular['title'] ?? $popular['name']}}" 
+                     class="w-32 h-auto mx-auto mb-2 rounded">
+                <h4 class="text-lg font-semibold">{{$popular['title'] ?? $popular['name']}}</h4>
+                <p class="text-gray-600">Valoración: {{$popular['vote_average']}}</p>
+                <p class="text-sm text-gray-500">ID: {{$popular['id']}}</p>
+            </div>
+            
+            <!-- Include Swiper CSS -->
+            <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+            
+            <!-- Include Swiper JS -->
+            <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+        @endforeach
+    </div>
+    <div class="swiper-button-next populares-next"></div>
+    <div class="swiper-button-prev populares-prev"></div>
 </div>
 
+<!-- MEJORES -->
+<h3 class="text-center text-xl font-bold mt-12">MEJORES</h3>
+<div class="swiper mejores-slider mt-4 px-6">
+    <div class="swiper-wrapper">
+        @foreach($mejores["results"] as $mejor)
+            <div class="swiper-slide bg-white rounded-lg shadow-md p-4 text-center w-72">
+                <img src="https://image.tmdb.org/t/p/w200{{$mejor['poster_path']}}" 
+                     alt="{{$mejor['title'] ?? $mejor['name']}}" 
+                     class="w-32 h-auto mx-auto mb-2 rounded">
+                <h4 class="text-lg font-semibold">{{$mejor['title'] ?? $mejor['name']}}</h4>
+                <p class="text-gray-600">Valoración: {{$mejor['vote_average']}}</p>
+                <p class="text-sm text-gray-500">ID: {{$mejor['id']}}</p>
+            </div>
+        @endforeach
+    </div>
+    <div class="swiper-button-next mejores-next"></div>
+    <div class="swiper-button-prev mejores-prev"></div>
+</div>
+
+
+
+
+<script>
+    new Swiper('.populares-slider', {
+        slidesPerView: 3,
+        spaceBetween: 20,
+        navigation: {
+            nextEl: '.populares-next',
+            prevEl: '.populares-prev',
+        },
+        breakpoints: {
+            640: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+        }
+    });
+
+    new Swiper('.mejores-slider', {
+        slidesPerView: 3,
+        spaceBetween: 20,
+        navigation: {
+            nextEl: '.mejores-next',
+            prevEl: '.mejores-prev',
+        },
+        breakpoints: {
+            640: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+        }
+    });
+</script>
