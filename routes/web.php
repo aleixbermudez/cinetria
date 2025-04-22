@@ -25,4 +25,8 @@ Route::middleware('auth')->group(function () {
 Route::get('/{tipo}', [ContenidoController::class, 'abrirPagina'])->name('contenido');
 Route::get('/peliculas-por-genero', [ContenidoController::class, 'obtenerPeliculasPorGenero']);
 
+Route::get('/detalles/{id}', [ContenidoController::class, 'abrirPaginaDetalle']);
+
+
+
 require __DIR__.'/auth.php';
