@@ -73,4 +73,51 @@ class ContenidoController extends Controller
         return response()->json($this->obtenerContenidoDesdeAPI($url));
     }
 
+    // Metodo para obtener la página concreta de una peli...
+    public function abrirPaginaDetalle($id)
+    {
+        $detalles = $this->obtenerInfoId($id);
+        // Cambiar el formato de la respuesta de la API
+        $movie = [
+            'titulo' => $detalles['title'] ?? $detalles['name'],
+            'poster_url' => 'https://image.tmdb.org/t/p/w500' . $detalles['poster_path'],
+            'anho' => substr($detalles['release_date'] ?? $detalles['first_air_date'], 0, 4),
+            'valoracion' => $detalles['vote_average'],
+            'resumen' => $detalles['overview'],
+            'reparto' => collect($this->obtenerContenidoDesdeAPI("https://api.themoviedb.org/3/movie/{$id}/credits?language=es-ES")['cast'])
+                ->take(10)
+                ->map(function ($actor) {
+                    return [
+                        'nombre' => $actor['name'],
+                        'personaje' => $actor['character'],
+                        'foto' => $actor['profile_path'] ? 'https://image.tmdb.org/t/p/w500' . $actor['profile_path'] : null,
+                    ];
+                }),
+            'production_company' => $detalles['production_companies'][0]['name'] ?? 'Desconocida',
+            'original_language' => strtoupper($detalles['original_language']),
+            'budget' => $detalles['budget'] ?? 0,
+            'revenue' => $detalles['revenue'] ?? 0,
+        ];
+
+        return view('pages.contenido_detalle', compact('movie'));
+    }
+
+    private function obtenerDirector($crew)
+    {
+        foreach ($crew as $persona) {
+            if ($persona['job'] === 'Director') {
+                return $persona['name'];
+            }
+        }
+        return 'Desconocido';
+    }
+
+
+    public function obtenerInfoId($id)
+    {
+        $url = "https://api.themoviedb.org/3/movie/{$id}?language=es-ES";
+
+        return $this->obtenerContenidoDesdeAPI($url);
+    }
+
 }
