@@ -74,33 +74,87 @@ class ContenidoController extends Controller
     }
 
     // Metodo para obtener la página concreta de una peli...
-    public function abrirPaginaDetalle($id)
+    public function abrirPaginaDetalle($tipo, $id)
     {
-        $detalles = $this->obtenerInfoId($id);
-        // Cambiar el formato de la respuesta de la API
-        $movie = [
-            'titulo' => $detalles['title'] ?? $detalles['name'],
-            'poster_url' => 'https://image.tmdb.org/t/p/w500' . $detalles['poster_path'],
-            'anho' => substr($detalles['release_date'] ?? $detalles['first_air_date'], 0, 4),
-            'valoracion' => $detalles['vote_average'],
-            'resumen' => $detalles['overview'],
-            'reparto' => collect($this->obtenerContenidoDesdeAPI("https://api.themoviedb.org/3/movie/{$id}/credits?language=es-ES")['cast'])
-                ->take(10)
-                ->map(function ($actor) {
-                    return [
-                        'nombre' => $actor['name'],
-                        'personaje' => $actor['character'],
-                        'foto' => $actor['profile_path'] ? 'https://image.tmdb.org/t/p/w500' . $actor['profile_path'] : null,
-                    ];
-                }),
-            'production_company' => $detalles['production_companies'][0]['name'] ?? 'Desconocida',
-            'original_language' => strtoupper($detalles['original_language']),
-            'budget' => $detalles['budget'] ?? 0,
-            'revenue' => $detalles['revenue'] ?? 0,
-        ];
+        if ($tipo == 'peliculas') {
+            $tipo_api = 'movie';
+        } else if ($tipo == 'series') {
+            $tipo_api = 'tv';
+        } else if ($tipo == 'personas') {
+            $tipo_api = 'person';
+        } else {
+            abort(404); // Manejar otros tipos si es necesario
+        }
 
-        return view('pages.contenido_detalle', compact('movie'));
+        $detalles = $this->obtenerInfoId($tipo, $id);
+
+        if ($tipo == 'personas') {
+            $persona = [
+                'nombre' => $detalles['name'],
+                'foto_perfil' => $detalles['profile_path'] ? 'https://image.tmdb.org/t/p/w500' . $detalles['profile_path'] : null,
+                'fecha_nacimiento' => $detalles['birthday'] ?? 'Desconocida',
+                'lugar_nacimiento' => $detalles['place_of_birth'] ?? 'Desconocido',
+                'biografia' => $detalles['biography'] ?? 'No disponible',
+                'genero' => $detalles['gender'] == 1 ? 'Mujer' : ($detalles['gender'] == 2 ? 'Hombre' : 'Desconocido'),
+                'conocido_por_departamento' => $detalles['known_for_department'] ?? 'Desconocido',
+                'peliculas_series' => collect($this->obtenerContenidoDesdeAPI("https://api.themoviedb.org/3/{$tipo_api}/{$id}/combined_credits?language=es-ES")['cast'])
+                    ->sortByDesc('popularity') // Ordenar por popularidad para mostrar lo más relevante
+                    ->take(10)
+                    ->map(function ($credito) {
+                        return [
+                            'titulo' => $credito['title'] ?? $credito['name'],
+                            'poster_url' => $credito['poster_path'] ? 'https://image.tmdb.org/t/p/w200' . $credito['poster_path'] : null,
+                            'tipo' => $credito['media_type'] == 'movie' ? 'Película' : 'Serie',
+                            'personaje' => $credito['character'] ?? null,
+                            'fecha' => $credito['release_date'] ?? $credito['first_air_date'] ?? null,
+                        ];
+                    }),
+            ];
+            return view('pages.persona_detalle', compact('persona')); // Asegúrate de tener una vista 'persona_detalle'
+        } else {
+            // Mantener el formato para películas y series
+            $movie = [
+                'titulo' => $detalles['title'] ?? $detalles['name'],
+                'poster_url' => 'https://image.tmdb.org/t/p/w500' . $detalles['poster_path'],
+                'anho' => substr($detalles['release_date'] ?? $detalles['first_air_date'], 0, 4),
+                'valoracion' => $detalles['vote_average'],
+                'resumen' => $detalles['overview'],
+                'reparto' => collect($this->obtenerContenidoDesdeAPI("https://api.themoviedb.org/3/{$tipo_api}/{$id}/credits?language=es-ES")['cast'])
+                    ->take(10)
+                    ->map(function ($actor) {
+                        return [
+                            'nombre' => $actor['name'],
+                            'personaje' => $actor['character'],
+                            'foto' => $actor['profile_path'] ? 'https://image.tmdb.org/t/p/w500' . $actor['profile_path'] : null,
+                        ];
+                    }),
+                'production_company' => $detalles['production_companies'][0]['name'] ?? 'Desconocida',
+                'original_language' => strtoupper($detalles['original_language']),
+                'budget' => $detalles['budget'] ?? 0,
+                'revenue' => $detalles['revenue'] ?? 0,
+            ];
+            return view('pages.contenido_detalle', compact('movie'));
+        }
     }
+
+    public function obtenerInfoId($tipo, $id)
+    {
+        if ($tipo == 'peliculas') {
+            $tipo_api = 'movie';
+        } else if ($tipo == 'series') {
+            $tipo_api = 'tv';
+        } else if ($tipo == 'personas') {
+            $tipo_api = 'person';
+        } else {
+            abort(404);
+        }
+        $url = "https://api.themoviedb.org/3/{$tipo_api}/{$id}?language=es-ES";
+
+        return $this->obtenerContenidoDesdeAPI($url);
+    }
+
+
+
 
     private function obtenerDirector($crew)
     {
@@ -113,11 +167,5 @@ class ContenidoController extends Controller
     }
 
 
-    public function obtenerInfoId($id)
-    {
-        $url = "https://api.themoviedb.org/3/movie/{$id}?language=es-ES";
-
-        return $this->obtenerContenidoDesdeAPI($url);
-    }
 
 }

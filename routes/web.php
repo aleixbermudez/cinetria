@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/{tipo}', [ContenidoController::class, 'abrirPagina'])->name('contenido');
 Route::get('/peliculas-por-genero', [ContenidoController::class, 'obtenerPeliculasPorGenero']);
 
-Route::get('/detalles/{id}', [ContenidoController::class, 'abrirPaginaDetalle']);
+Route::get('/{tipo}/{id}', [ContenidoController::class, 'abrirPaginaDetalle']);
 
 
 
