@@ -1,8 +1,13 @@
 @extends('layouts.layout')
 
 @section('title', $movie['titulo'])
-
+<div id="container flex justify-center items-center w-full">
+        @include('components.navbar')
+        <div class="container mx-auto">
+            @include('components.buscador')
+        </div>
 @section('content')
+
 <div class="container mx-auto px-4 py-8">
     <div class="flex">
         <div>
