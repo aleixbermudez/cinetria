@@ -57,6 +57,7 @@ class ContenidoController extends Controller
     // Metodo para obtener los géneros desde la API
     private function obtenerGeneros($tipo)
     {
+
         $url = "https://api.themoviedb.org/3/genre/{$tipo}/list?language=es-ES";
         return $this->obtenerContenidoDesdeAPI($url);
     }
@@ -87,7 +88,6 @@ class ContenidoController extends Controller
         }
 
         $detalles = $this->obtenerInfoId($tipo, $id);
-
         if ($tipo == 'personas') {
             $persona = [
                 'nombre' => $detalles['name'],
@@ -112,6 +112,7 @@ class ContenidoController extends Controller
             ];
             return view('pages.persona_detalle', compact('persona')); // Asegúrate de tener una vista 'persona_detalle'
         } else {
+            
             // Mantener el formato para películas y series
             $movie = [
                 'titulo' => $detalles['title'] ?? $detalles['name'],
@@ -128,11 +129,22 @@ class ContenidoController extends Controller
                             'foto' => $actor['profile_path'] ? 'https://image.tmdb.org/t/p/w500' . $actor['profile_path'] : null,
                         ];
                     }),
-                'production_company' => $detalles['production_companies'][0]['name'] ?? 'Desconocida',
-                'original_language' => strtoupper($detalles['original_language']),
-                'budget' => $detalles['budget'] ?? 0,
-                'revenue' => $detalles['revenue'] ?? 0,
+                'generos' => collect($detalles['genres'])
+                    ->map(function ($genero) {
+                        return [
+                            'nombre' => $genero['name'],
+                            'id' => $genero['id'],
+                        ];
+                    }),
+                'trailer' => $this->obtenerContenidoDesdeAPI("https://api.themoviedb.org/3/{$tipo_api}/{$id}/videos?language=es-ES")['results'][0]['key'] ?? null,
+                'duracion' => $detalles['runtime'] ?? $detalles['episode_run_time'][0] ?? 0,
+                'productora' => $detalles['production_companies'][0]['name'] ?? 'Desconocida',
+                'idioma_original' => strtoupper($detalles['original_language']),
+                'presupuesto' => $detalles['budget'] ?? 0,
+                'recaudacion' => $detalles['revenue'] ?? 0,
+                'fecha_estreno' => $detalles['release_date'] ?? $detalles['first_air_date'],
             ];
+            //dd($detalles);
             return view('pages.contenido_detalle', compact('movie'));
         }
     }

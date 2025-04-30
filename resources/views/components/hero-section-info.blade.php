@@ -28,7 +28,7 @@
             </span>
             <div class="grow">
               <span class="text-sm sm:text-base text-gray-500 dark:text-neutral-500">
-                Conversaciones sin límites
+                Recomendaciones personalizadas
               </span>
             </div>
           </li>
@@ -39,7 +39,7 @@
             </span>
             <div class="grow">
               <span class="text-sm sm:text-base text-gray-500 dark:text-neutral-500">
-                Descubre y sigue a tus amigos
+                Sigue a tus amigos y descubre sus opiniones
               </span>
             </div>
           </li>
@@ -50,7 +50,7 @@
             </span>
             <div class="grow">
               <span class="text-sm sm:text-base text-gray-500 dark:text-neutral-500">
-                Organiza tus listas 
+                Organiza tus películas, series, actores, directores... en listas totalmente personalizables
               </span>
             </div>
           </li>
