@@ -1,7 +1,13 @@
-<div class="w-full flex flex-col items-center relative">
-    <div class="w-full mt-10">
-        <input type="text" id="buscador" placeholder="Busca películas, series, actores..." class="border p-2 rounded w-full">
-        <div id="resultados" class="mt-2 bg-gray-200 rounded p-4 absolute w-full shadow-md z-50 max-h-60 overflow-y-auto" style="display: none;"></div>
+<div class="w-full flex flex-col items-center">
+    <div class="w-full max-w-[600px] mt-10">
+        <div class="relative">
+            <input 
+                type="text" 
+                id="buscador" 
+                placeholder="Buscar..." 
+                class="border border-gray-300 p-4 pl-12 rounded-full w-full shadow-lg focus:outline-none focus:ring-4 focus:ring-amber-400 focus:border-amber-400 transition-all duration-300 ease-in-out !important"
+            >
+        </div>
     </div>
 </div>
 <script>
