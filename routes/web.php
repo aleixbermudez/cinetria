@@ -22,7 +22,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/{tipo}', [ContenidoController::class, 'abrirPagina'])->name('contenido');
+Route::get('/{tipo}', [ContenidoController::class, 'abrirPagina'])
+    ->whereIn('tipo', ['peliculas', 'series'])
+    ->name('contenido');
+
 Route::get('/peliculas-por-genero', [ContenidoController::class, 'obtenerPeliculasPorGenero']);
 
 Route::get('/{tipo}/{id}', [ContenidoController::class, 'abrirPaginaDetalle']);
