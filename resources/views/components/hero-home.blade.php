@@ -7,7 +7,45 @@
 <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8">
   <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
     <div>
-      <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight dark:text-white"> Las grandes historias no terminan en los créditos. Vívelas en <span class="text-amber-300">Cinetria</span></h1>
+      <h1 class="block text-3xl font-bold text-gray-800 sm:text-4xl lg:text-5xl lg:leading-tight dark:text-white">
+        Las grandes historias no terminan en los créditos. Vívelas en 
+        <span class="text-amber-300">
+          <span id="typewriter"></span>
+        </span>
+      </h1>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const text = "Cinetria";
+          const typewriterElement = document.getElementById('typewriter');
+          let index = 0;
+          let isDeleting = false;
+
+          function typeEffect() {
+        if (!isDeleting && index < text.length) {
+          typewriterElement.textContent += text.charAt(index);
+          index++;
+          setTimeout(typeEffect, 150);
+        } else if (!isDeleting && index === text.length) {
+          setTimeout(() => {
+            isDeleting = true;
+            typeEffect();
+          }, 3000);
+        } else if (isDeleting && index > 0) {
+          typewriterElement.textContent = text.substring(0, index - 1);
+          index--;
+          setTimeout(typeEffect, 100);
+        } else if (isDeleting && index === 0) {
+          isDeleting = false;
+          setTimeout(typeEffect, 500);
+        }
+          }
+
+          typeEffect();
+        });
+        
+      </script>
+      
       <p class="mt-3 text-lg text-gray-800 dark:text-neutral-400">Más que peliculas. Una comunidad que siente, analiza y comparte el cine.</p>
 
       <!-- Buttons -->

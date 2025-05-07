@@ -1,37 +1,53 @@
 @extends('layouts.layout')
 @include('components.navbar')
 @section('title', $movie['titulo'])
-<div id="container flex justify-center items-center w-full">
-        <div class="container mx-auto">
-            @include('components.buscador')
-        </div>
-@section('content')
-<h1 class="text-3xl font-bold mb-6 text-center">{{ $movie['titulo'] }}</h1>
-<div class="container mx-auto px-4 py-8">
-    <div class="flex">
-        <div class="bg-yellow-400 rounded-lg shadow-md p-4 mr-4 mt-auto flex justify-center items-center">
-            <img src="{{ $movie['poster_url'] }}" alt="Poster de {{ $movie['titulo'] }}" class="rounded-lg shadow-md">
-        </div>
 
-        <div class="flex flex-col ">
-            <div class="col-span-2 flex flex-col justify-between bg-slate-400 p-4 rounded-lg shadow-md">
-                <h2 class="text-2xl font-semibold mb-4">Detalles Generales</h2>
-                <ul class="mb-4 space
-            <ul class="mb-4 space-y-2 text-gray-700">
-                <li><strong>Año:</strong> {{ $movie['anho'] }}</li>
-                <li><strong>Puntuación TMDB:</strong> {{ $movie['valoracion'] }}</li>
-                <li><strong>Sinopsis:</strong> {{ $movie['resumen'] }}</li>
-            </ul>
-            <button class="bg-yellow-400 text-black font-bold py-2 px-4 rounded w-fit hover:bg-yellow-500">
-                Crear Reseña
-            </button>
-        </div>
-        </div>
+@section('content')
+<div class="dark:bg-neutral-900 py-12">
+
+    {{-- Buscador --}}
+    <div class="relative z-40 mb-12">
+        @include('components.buscador')
     </div>
 
-                <div class="col-span-2 flex flex-col justify-between bg-slate-400 p-4 rounded-lg shadow-md">
-                    <h2 class="text-2xl font-semibold mb-4">Detalles Adicionales</h2>
-                    <ul class="mb-4 space-y-2 text-gray-700">
+    <div class="max-w-6xl mx-auto space-y-16 px-4 sm:px-6 lg:px-8">
+
+        {{-- Título --}}
+        <h1 class="text-4xl font-extrabold text-center text-gray-900 dark:text-white">
+            {{ $movie['titulo'] }}
+        </h1>
+
+        {{-- Contenido principal --}}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+
+            {{-- Poster --}}
+            <div class="flex justify-center">
+                <img src="{{ $movie['poster_url'] }}" alt="Poster de {{ $movie['titulo'] }}"
+                    class="rounded-2xl shadow-xl w-full max-w-xs">
+            </div>
+
+            {{-- Detalles --}}
+            <div class="lg:col-span-2 space-y-10">
+
+                {{-- Detalles Generales --}}
+                <div class="bg-white dark:bg-neutral-800 rounded-2xl shadow p-6 space-y-4">
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Detalles Generales</h2>
+                    <ul class="space-y-1 text-gray-700 dark:text-neutral-300">
+                        <li><strong>Año:</strong> {{ $movie['anho'] }}</li>
+                        <li><strong>Puntuación TMDB:</strong> {{ $movie['valoracion'] }}</li>
+                        <li><strong>Sinopsis:</strong> {{ $movie['resumen'] }}</li>
+                    </ul>
+                    <div>
+                        <button class="mt-4 bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-2 px-5 rounded-full transition">
+                            Crear Reseña
+                        </button>
+                    </div>
+                </div>
+
+                {{-- Detalles Adicionales --}}
+                <div class="bg-white dark:bg-neutral-800 rounded-2xl shadow p-6 space-y-4">
+                    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">Detalles Adicionales</h2>
+                    <ul class="space-y-1 text-gray-700 dark:text-neutral-300">
                         <li><strong>Géneros:</strong>
                             @foreach ($movie['generos'] as $genero)
                                 {{ $genero['nombre'] }}@if (!$loop->last), @endif
@@ -42,29 +58,29 @@
                         <li><strong>Presupuesto:</strong> {{ $movie['presupuesto'] }}</li>
                         <li><strong>Recaudación:</strong> {{ $movie['recaudacion'] }}</li>
                         <li><strong>Fecha de Estreno:</strong> {{ $movie['fecha_estreno'] }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-
-
-
-        <div class="col-span-3">
-            <h2 class="text-2xl font-semibold mb-4">Reparto</h2>
-            <ul class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {{-- Reparto --}}
+        <div class="bg-white dark:bg-neutral-800 rounded-2xl shadow p-6">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white text-center mb-8">Reparto</h2>
+            <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
                 @foreach ($movie['reparto'] as $actor)
-                    <li class="text-center">
-                        <div class="foto">
-                            <img src="{{ $actor['foto'] }}" alt="Foto de {{ $actor['nombre'] }}" class="rounded-full w-15 h-auto mx-auto mb-2">
-                        </div>
-                        <div class="text-gray-800 font-medium">
+                    <li class="text-center space-y-2">
+                        <img src="{{ $actor['foto'] }}" alt="Foto de {{ $actor['nombre'] }}"
+                            class="w-20 h-20 object-cover rounded-full mx-auto shadow">
+                        <div class="text-gray-900 dark:text-white font-medium">
                             {{ $actor['nombre'] }}
                         </div>
-                        <div class="text-gray-600 text-sm">
+                        <div class="text-gray-500 dark:text-neutral-400 text-sm">
                             {{ $actor['personaje'] }}
                         </div>
                     </li>
                 @endforeach
             </ul>
+        </div>
     </div>
-
-
 </div>
 @endsection

@@ -8,7 +8,7 @@
 
     <div id="container flex justify-center items-center w-full">
         @include('components.navbar')
-        <div class="container mx-auto">
+        <div class="mx-auto">
             @include('components.portada')
         </div>
         @include('components.sliders')

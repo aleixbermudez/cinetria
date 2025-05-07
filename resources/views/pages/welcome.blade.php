@@ -16,6 +16,9 @@
         <div class="pt-5">
             @include('components.icon-section')
         </div>
+        <div class="pt-5">
+            @include('components.subscribe')
+        </div>
         <div class="pt-20">
             @include('components.footer')
         </div>

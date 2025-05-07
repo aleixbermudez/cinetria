@@ -1,67 +1,95 @@
-<div class="w-full flex flex-col items-center">
-    <div class="w-full max-w-[600px] mt-10">
-        <div class="relative">
-            <input 
-                type="text" 
-                id="buscador" 
-                placeholder="Buscar..." 
-                class="border border-gray-300 p-4 pl-12 rounded-full w-full shadow-lg focus:outline-none focus:ring-4 focus:ring-amber-400 focus:border-amber-400 transition-all duration-300 ease-in-out !important"
-            >
-        </div>
-    </div>
-</div>
+<!-- Hero Cine -->
+<section class="relative bg-cover bg-center bg-no-repeat" style="background-image: url('https://image.tmdb.org/t/p/original/8YFL5QQVPy3AgrEQxNYVSgiPEbe.jpg');">
+  <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+
+  <div class="relative z-10 flex flex-col items-center justify-center text-center text-white py-24 px-4 sm:px-6 lg:px-8">
+    <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight mb-4">
+      Descubre tus películas y series favoritas
+    </h1>
+    <p class="text-lg sm:text-xl max-w-2xl mb-8 text-neutral-200">
+      Busca entre miles de títulos, actores y series de televisión. Actualizado con los últimos estrenos.
+    </p>
+
+    <!-- Buscador -->
+    <form class="w-full max-w-xl relative" autocomplete="off">
+      <div class="flex items-center gap-2 bg-white/90 dark:bg-neutral-900 rounded-lg shadow-lg p-2 backdrop-blur">
+        <input
+          id="buscador"
+          type="text"
+          placeholder="Buscar película, serie o persona..."
+          class="flex-grow px-4 py-2 text-sm rounded-lg bg-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-neutral-400 focus:outline-none"
+        />
+        <button type="submit"
+          class="p-3 bg-[#FCD34D] hover:bg-amber-500 transition rounded-lg text-white flex items-center justify-center">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Resultados -->
+      <div id="resultados"
+        class="absolute z-20 w-full mt-2 bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 rounded-lg shadow-lg hidden max-h-[400px] overflow-y-auto">
+        <!-- JS inyecta aquí -->
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- Script de búsqueda -->
 <script>
-// Buscador
-var buscador = document.querySelector('#buscador');
-var resultadosDiv = document.querySelector('#resultados');
+  document.addEventListener('DOMContentLoaded', () => {
+    const buscador = document.querySelector('#buscador');
+    const resultadosDiv = document.querySelector('#resultados');
 
-buscador.addEventListener('keyup', buscarApi);
+    buscador.addEventListener('keyup', function () {
+      const query = buscador.value.trim();
 
-function buscarApi(e) {
-    let query = buscador.value.trim();
-    resultadosDiv.style.display = query ? 'block' : 'none';
-
-    if (query) {
-        const options = {
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4OGEzMjE5MTAxNTZiZWFlZWY1MzBlYzNhMmQxNTg5MSIsIm5iZiI6MTczODMxNjcyMS4yNjgsInN1YiI6IjY3OWM5YmIxODIyZTdkMzJmN2JkZTg2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.TnYuqSvLds-SafDDSVYFrCieAvhOqtG0kstT95IPt1s'
-            }
-        };
-
-        fetch('https://api.themoviedb.org/3/search/multi?query='+query+'&include_adult=false&language=es-ES&page=1', options)
-            .then(res => res.json())
-            .then(res => {
-                console.log(res);
-                let html = '';
-                var tipoResultado = '';
-                res.results.slice(0, 10).forEach(resultado => {
-                    if(resultado.media_type == 'movie') {
-                        tipoResultado = 'peliculas';
-                    } else if(resultado.media_type == 'tv') {
-                        tipoResultado = 'series';
-                    } else if(resultado.media_type == 'person') {
-                        tipoResultado = 'personas';
-                    }
-
-                    html += `
-
-                        <div class="resultado hover:bg-gray-100 cursor-pointer p-2">
-                            <a href="/${tipoResultado}/${resultado.id}" class="flex items-center">
-                                <img src="https://image.tmdb.org/t/p/w92${resultado.poster_path || resultado.profile_path}" class="imagen-resultado w-12 h-auto rounded mr-2" alt="No disponible">
-                                <div class="info">
-                                    <h5 class="titulo-resultado text-sm font-semibold">${resultado.title || resultado.name}</h5>
-                                </div>
-                            </a>
-                        </div>
-                    `;
-                });
-                resultadosDiv.innerHTML = html;
-            })
-            .catch(err => console.error(err));
-    } else {
+      if (!query) {
+        resultadosDiv.style.display = 'none';
         resultadosDiv.innerHTML = '';
-    }
-}
+        return;
+      }
+
+      resultadosDiv.style.display = 'block';
+
+      fetch(`https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(query)}&include_adult=false&language=es-ES&page=1`, {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4OGEzMjE5MTAxNTZiZWFlZWY1MzBlYzNhMmQxNTg5MSIsIm5iZiI6MTczODMxNjcyMS4yNjgsInN1YiI6IjY3OWM5YmIxODIyZTdkMzJmN2JkZTg2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.TnYuqSvLds-SafDDSVYFrCieAvhOqtG0kstT95IPt1s'
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          let html = '';
+
+          data.results.slice(0, 10).forEach(item => {
+            let tipo = item.media_type === 'movie' ? 'peliculas'
+              : item.media_type === 'tv' ? 'series'
+                : 'personas';
+
+            let imagen = item.poster_path || item.profile_path;
+            let nombre = item.title || item.name;
+
+            html += `
+              <div class="hover:bg-gray-100 dark:hover:bg-neutral-700 cursor-pointer p-2">
+                <a href="/${tipo}/${item.id}" class="flex items-center gap-3">
+                  <img src="https://image.tmdb.org/t/p/w92${imagen}" class="w-12 h-auto rounded shadow-sm" alt="${nombre}">
+                  <span class="text-sm font-medium text-gray-800 dark:text-white">${nombre}</span>
+                </a>
+              </div>
+            `;
+          });
+
+          resultadosDiv.innerHTML = html;
+        })
+        .catch(error => {
+          console.error('Error al buscar:', error);
+          resultadosDiv.innerHTML = '<p class="p-4 text-red-500">Error al cargar resultados</p>';
+        });
+    });
+  });
 </script>
