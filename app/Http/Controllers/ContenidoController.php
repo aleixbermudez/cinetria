@@ -11,17 +11,18 @@ class ContenidoController extends Controller
         // Cambio de idioma al tipo para que se haga la selección de la API correctamente
         if ($tipo == 'peliculas') {
             $tipoApi = 'movie';
-        } else {
+        } else if ($tipo == 'series') {
             $tipoApi = 'tv';
-        }
+        } 
         // Obtener datos desde la API
         $mejores = $this->mejorContenido($tipoApi);
         $populares = $this->contenidoPopulares($tipoApi);
+        $estrenos = $this->proximosEstrenos($tipoApi);
         $generos = $this->obtenerGeneros($tipoApi);
 
 
         // devolver la vista con los datos obtenidos
-        return view('pages.contenido', compact('tipo','mejores', 'populares', 'generos'));
+        return view('pages.contenido', compact('tipo','mejores', 'populares','estrenos', 'generos'));
     }
 
     // Metodo que hace la llamada a la API segun la url que se le pase
@@ -51,6 +52,16 @@ class ContenidoController extends Controller
     private function contenidoPopulares($tipo)
     {
         $url = "https://api.themoviedb.org/3/{$tipo}/popular?language=es-ES&page=1";
+        return $this->obtenerContenidoDesdeAPI($url);
+    }
+
+    private function proximosEstrenos($tipo)
+    {
+        if ($tipo == 'movie') {
+            $url = "https://api.themoviedb.org/3/movie/upcoming?language=es-ES&page=1";
+        } else if ($tipo == 'tv') {
+            $url = "https://api.themoviedb.org/3/tv/on_the_air?language=es-ES&page=1";
+        }
         return $this->obtenerContenidoDesdeAPI($url);
     }
 
