@@ -19,14 +19,7 @@
           placeholder="Buscar película, serie o persona..."
           class="flex-grow px-4 py-2 text-sm rounded-lg bg-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-neutral-400 focus:outline-none"
         />
-        <button type="submit"
-          class="p-3 bg-[#FCD34D] hover:bg-amber-500 transition rounded-lg text-white flex items-center justify-center">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="8" />
-            <path d="M21 21l-4.35-4.35" />
-          </svg>
-        </button>
+
       </div>
 
       <!-- Resultados -->
@@ -42,8 +35,14 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const buscador = document.querySelector('#buscador');
-    const resultadosDiv = document.querySelector('#resultados');
+    buscador.addEventListener("keydown", function(event) {
+      console.log(event.key);
+      if (event.key == "Enter" || event.keyCode == 13) {
+        event.preventDefault(); // Evita la recarga de la página al presionar Enter
+      }
+    });
 
+    const resultadosDiv = document.querySelector('#resultados');
     buscador.addEventListener('keyup', function () {
       const query = buscador.value.trim();
 
