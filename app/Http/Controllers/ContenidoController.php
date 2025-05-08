@@ -112,9 +112,10 @@ class ContenidoController extends Controller
                     ->take(12)
                     ->map(function ($credito) {
                         return [
+                            'id' => $credito['id'],
                             'titulo' => $credito['title'] ?? $credito['name'],
                             'poster_url' => $credito['poster_path'] ? 'https://image.tmdb.org/t/p/w200' . $credito['poster_path'] : null,
-                            'tipo' => $credito['media_type'] == 'movie' ? 'Película' : 'Serie',
+                            'tipo' => $credito['media_type'] == 'movie' ? 'peliculas' : 'series',
                             'personaje' => $credito['character'] ?? null,
                             'fecha' => $credito['release_date'] ?? $credito['first_air_date'] ?? null,
                         ];

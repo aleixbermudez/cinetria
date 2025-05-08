@@ -11,7 +11,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="md:col-span-1 flex justify-center">
                 @if ($persona['foto_perfil'])
-                    <img src="{{ $persona['foto_perfil'] }}" alt="Foto de {{ $persona['nombre'] }}" class="rounded-md w-auto h-full max-h-96">
+                    <img src="{{ $persona['foto_perfil'] }}" alt="Foto de {{ $persona['nombre'] }}" class="rounded-md w-full h-auto">
                 @else
                     <div class="w-48 h-72 bg-gray-200 rounded-md flex items-center justify-center">
                         <span class="text-gray-500">No hay foto disponible</span>
@@ -62,14 +62,15 @@
                     @foreach ($persona['peliculas_series'] as $trabajo)
                         <div class="bg-gray-100 rounded-md shadow-sm p-4">
                             @if ($trabajo['poster_url'])
-                                <img src="{{ $trabajo['poster_url'] }}" alt="{{ $trabajo['titulo'] }}" class="rounded-md w-full h-auto mb-2">
+                                <a href="/{{$trabajo['tipo']}}/{{$trabajo['id']}}">
+                                    <img src="{{ $trabajo['poster_url'] }}" alt="{{ $trabajo['titulo'] }}" class="rounded-md w-full h-auto mb-2">
+                                </a>
                             @else
                                 <div class="w-full h-32 bg-gray-200 rounded-md flex items-center justify-center mb-2">
                                     <span class="text-gray-500 text-sm">No hay póster</span>
                                 </div>
                             @endif
                             <h5 class="text-sm font-semibold">{{ $trabajo['titulo'] }}</h5>
-                            <p class="text-xs text-gray-500">{{ $trabajo['tipo'] }}</p>
                             @if ($trabajo['personaje'])
                                 <p class="text-xs text-gray-500 italic">como {{ $trabajo['personaje'] }}</p>
                             @endif
