@@ -126,7 +126,7 @@ class ContenidoController extends Controller
             // Mantener el formato para películas y series
             $movie = [
                 'titulo' => $detalles['title'] ?? $detalles['name'],
-                'poster_url' => 'https://image.tmdb.org/t/p/w500' . $detalles['poster_path'],
+                'poster_url' => 'https://image.tmdb.org/t/p/original' . $detalles['poster_path'],
                 'anho' => substr($detalles['release_date'] ?? $detalles['first_air_date'], 0, 4),
                 'valoracion' => $detalles['vote_average'],
                 'resumen' => $detalles['overview'],

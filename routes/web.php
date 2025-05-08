@@ -12,9 +12,13 @@ Route::get('/sobre-cinetria', function () {
     return view('pages.sobre-cinetria');
 })->name('sobre-cinetria');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/form', function () {
+    return view('pages.form');
+})->name('form');
+
+Route::get('/perfil', function () {
+    return view('pages.perfil');
+})->middleware(['auth', 'verified'])->name('perfil');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -3,15 +3,15 @@
 @section('title', $persona['nombre'] ?? 'Detalle de la Persona')
 <div id="container flex justify-center items-center w-full">
         @include('components.navbar')
-        <div class="container mx-auto">
+
             @include('components.buscador')
-        </div>
+
 @section('content')
     <div class="container mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="md:col-span-1 flex justify-center">
                 @if ($persona['foto_perfil'])
-                    <img src="{{ $persona['foto_perfil'] }}" alt="Foto de {{ $persona['nombre'] }}" class="rounded-md max-w-full h-auto">
+                    <img src="{{ $persona['foto_perfil'] }}" alt="Foto de {{ $persona['nombre'] }}" class="rounded-md w-auto h-full max-h-96">
                 @else
                     <div class="w-48 h-72 bg-gray-200 rounded-md flex items-center justify-center">
                         <span class="text-gray-500">No hay foto disponible</span>
