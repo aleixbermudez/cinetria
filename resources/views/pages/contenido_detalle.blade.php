@@ -1,5 +1,4 @@
 @extends('layouts.layout')
-@include('components.navbar')
 @section('title', $movie['titulo'])
 
 @section('content')

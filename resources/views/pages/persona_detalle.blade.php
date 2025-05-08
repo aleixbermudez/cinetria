@@ -2,7 +2,6 @@
 
 @section('title', $persona['nombre'] ?? 'Detalle de la Persona')
 <div id="container flex justify-center items-center w-full">
-        @include('components.navbar')
 
             @include('components.buscador')
 
@@ -83,5 +82,4 @@
             </div>
         @endif
     </div>
-    @include('components.footer')
 @endsection

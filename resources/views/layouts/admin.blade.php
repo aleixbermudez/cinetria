@@ -5,25 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="{{ asset('images/logo.png') }}">
 
-    <title>@yield('title')</title>
+    <title>Admin</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 
 </head>
 <body class="">
-
-    @include('components.navbar')
+    <div>
+        @include('components.dashboard.sidebar')
+    </div>
+    
 
     <div class="">
         @yield('content')       
     </div>
-    
-    <script src="{{ asset('node_modules/preline/dist/preline.js') }}"></script>
 
-    <div class="mt-20">
-        @include('components.footer')
-    </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>

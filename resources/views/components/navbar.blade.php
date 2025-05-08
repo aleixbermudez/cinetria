@@ -22,10 +22,16 @@
       'name' => 'Foro',
       'href' => "/foro"
     ],
-    [
+    auth()->check()
+      ? [
+      'name' => 'Mi Perfil',
+      'href' => "/perfil"
+      ]
+      : [
       'name' => 'Login',
       'href' => "/login"
-    ]
+      ],
+    
   ];
 @endphp
 
@@ -58,6 +64,15 @@
             <a class="{{ $onHover }}" href="{{ $item['href'] }}">{{ $item['name'] }}</a>
           </div>
         @endforeach
+
+        @auth
+          @if(auth()->user()->hasRole('admin'))
+            <div>
+              <a class="text-amber-300 font-bold" href="/admin">Admin</a>
+            </div>
+          @endif
+        @endauth
+
       </div>
     </div>
   </nav>

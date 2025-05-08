@@ -6,7 +6,6 @@
 @section('content')
 
     <div id="container">
-        @include('components.navbar')
         <div class="pt-5 ">
             @include('components.hero-home')
         </div>
@@ -18,9 +17,6 @@
         </div>
         <div class="pt-5">
             @include('components.subscribe')
-        </div>
-        <div class="pt-20">
-            @include('components.footer')
         </div>
         
     </div>
