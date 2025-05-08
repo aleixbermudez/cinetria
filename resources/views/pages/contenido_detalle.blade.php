@@ -69,14 +69,17 @@
             <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
                 @foreach ($movie['reparto'] as $actor)
                     <li class="text-center space-y-2">
-                        <img src="{{ $actor['foto'] }}" alt="Foto de {{ $actor['nombre'] }}"
-                            class="w-20 h-20 object-cover rounded-full mx-auto shadow">
-                        <div class="text-gray-900 dark:text-white font-medium">
-                            {{ $actor['nombre'] }}
-                        </div>
-                        <div class="text-gray-500 dark:text-neutral-400 text-sm">
-                            {{ $actor['personaje'] }}
-                        </div>
+                        <a href="/personas/{{ $actor['id'] }}" class="block">
+                            {{-- Si no hay foto, mostrar una imagen por defecto --}}
+                            <img src="{{ $actor['foto'] }}" alt="Foto de {{ $actor['nombre'] }}"
+                                class="w-20 h-20 object-cover rounded-full mx-auto shadow">
+                            <div class="text-gray-900 dark:text-white font-medium">
+                                {{ $actor['nombre'] }}
+                            </div>
+                            <div class="text-gray-500 dark:text-neutral-400 text-sm">
+                                {{ $actor['personaje'] }}
+                            </div>
+                        </a>
                     </li>
                 @endforeach
             </ul>

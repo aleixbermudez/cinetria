@@ -109,8 +109,7 @@ class ContenidoController extends Controller
                 'genero' => $detalles['gender'] == 1 ? 'Mujer' : ($detalles['gender'] == 2 ? 'Hombre' : 'Desconocido'),
                 'conocido_por_departamento' => $detalles['known_for_department'] ?? 'Desconocido',
                 'peliculas_series' => collect($this->obtenerContenidoDesdeAPI("https://api.themoviedb.org/3/{$tipo_api}/{$id}/combined_credits?language=es-ES")['cast'])
-                    ->sortByDesc('popularity') // Ordenar por popularidad para mostrar lo más relevante
-                    ->take(10)
+                    ->take(12)
                     ->map(function ($credito) {
                         return [
                             'titulo' => $credito['title'] ?? $credito['name'],
@@ -135,6 +134,7 @@ class ContenidoController extends Controller
                     ->take(10)
                     ->map(function ($actor) {
                         return [
+                            'id' => $actor['id'],
                             'nombre' => $actor['name'],
                             'personaje' => $actor['character'],
                             'foto' => $actor['profile_path'] ? 'https://image.tmdb.org/t/p/w500' . $actor['profile_path'] : null,

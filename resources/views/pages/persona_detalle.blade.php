@@ -21,6 +21,19 @@
             <div class="md:col-span-2">
                 <h2 class="text-2xl font-semibold mb-4">{{ $persona['nombre'] }}</h2>
                 <p class="text-gray-600 mb-2">
+                    @php
+                        if($persona['conocido_por_departamento'] == 'Acting'){
+                            $persona['conocido_por_departamento'] = 'Actor/Actriz';
+                        } elseif($persona['conocido_por_departamento'] == 'Directing'){
+                            $persona['conocido_por_departamento'] = 'Director/Directora';
+                        } elseif($persona['conocido_por_departamento'] == 'Production'){
+                            $persona['conocido_por_departamento'] = 'Producción';
+                        } elseif($persona['conocido_por_departamento'] == 'Writing'){
+                            $persona['conocido_por_departamento'] = 'Escritor/Escritora';
+                        } elseif($persona['conocido_por_departamento'] == 'Sound'){
+                            $persona['conocido_por_departamento'] = 'Sonido';
+                        }
+                    @endphp
                     <span class="font-semibold">Conocido por:</span> {{ $persona['conocido_por_departamento'] ?? 'Desconocido' }}
                 </p>
                 @if ($persona['fecha_nacimiento'])
