@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    const tipo = '{{ $tipo }}'; // 'peliculas' o 'series'
+    const tipo = '{{ $tipo }}';
     let tipo_api = tipo === 'peliculas' ? 'movie' : 'tv';
     let idioma = tipo === 'peliculas' ? 'en' : 'es';
 
@@ -59,10 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 if (data.genres?.length > 0) {
                     generosContainer.innerHTML = '';
-
-                    data.genres.forEach(genero => {
-                        generosMap[genero.id] = genero.name;
-                    });
+                    data.genres.forEach(genero => generosMap[genero.id] = genero.name);
 
                     if (generosUrl) {
                         const nombreGeneros = generosUrl.split(',');
@@ -150,8 +147,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        const pagina = urlParams.get('page') || 1;
-        searchApiUrl += `&page=${pagina}`;
+        const paginaActual = new URLSearchParams(window.location.search).get('page') || 1;
+        searchApiUrl += `&page=${paginaActual}`;
 
         fetch(searchApiUrl, options)
             .then(response => {
@@ -207,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let html = '<div class="flex justify-center mt-6 space-x-1">';
 
         if (paginaActual > 1) {
-            html += `<button class="pagination-btn px-3 py-1 rounded bg-gray-200 hover:bg-gray-300" data-page="${paginaActual - 1}">Anterior</button>`;
+            html += `<button class="pagination-btn px-3 py-1 rounded bg-gray-200 hover:bg-amber-200" data-page="${paginaActual - 1}">Anterior</button>`;
         }
 
         const maxPaginas = 5;
@@ -220,12 +217,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
         for (let i = inicio; i <= fin; i++) {
             html += i === parseInt(paginaActual)
-                ? `<button class="px-3 py-1 rounded bg-blue-500 text-white" disabled>${i}</button>`
-                : `<button class="pagination-btn px-3 py-1 rounded bg-gray-200 hover:bg-gray-300" data-page="${i}">${i}</button>`;
+                ? `<button class="px-3 py-1 rounded bg-amber-300 text-white" disabled>${i}</button>`
+                : `<button class="pagination-btn px-3 py-1 rounded bg-gray-200 hover:bg-amber-200" data-page="${i}">${i}</button>`;
         }
 
         if (paginaActual < totalPaginas) {
-            html += `<button class="pagination-btn px-3 py-1 rounded bg-gray-200 hover:bg-gray-300" data-page="${paginaActual + 1}">Siguiente</button>`;
+            html += `<button class="pagination-btn px-3 py-1 rounded bg-gray-200 hover:bg-amber-200" data-page="${paginaActual + 1}">Siguiente</button>`;
         }
 
         html += '</div>';

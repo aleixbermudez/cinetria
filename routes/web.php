@@ -30,6 +30,12 @@ Route::get('/peliculas-por-genero', [ContenidoController::class, 'obtenerPelicul
 
 Route::get('/{tipo}/{id}', [ContenidoController::class, 'abrirPaginaDetalle']);
 
+Route::middleware('auth')->group(function () {
+    Route::get('/foro', function () {
+        return view('pages.foro');
+    })->name('foro');
+});
+
 
 
 require __DIR__.'/auth.php';
