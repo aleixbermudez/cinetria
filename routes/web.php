@@ -21,9 +21,10 @@ Route::get('/form', function () {
 })->name('form');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/perfil', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/perfil', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/perfil/editar', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/perfil/editar', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/perfil/editar', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/perfil', [ProfileController::class, 'index'])->name('perfil');
 });
 
 Route::get('/{tipo}', [ContenidoController::class, 'abrirPagina'])

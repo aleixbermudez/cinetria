@@ -57,4 +57,18 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    /**
+     * Display the user's profile.
+     */
+    public function index(Request $request): View
+    {
+        $user = $request->user();
+        //$resenhas = $user->resenhas()->get();
+
+        return view('profile.mi-perfil', [
+            'user' => $user,
+            //'resenhas' => $resenhas,
+        ]);
+    }
 }
