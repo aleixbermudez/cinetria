@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Favorita;
+use Illuminate\Support\Facades\Auth;
 
 class ContenidoController extends Controller
 {
@@ -126,6 +128,7 @@ class ContenidoController extends Controller
             
             // Mantener el formato para películas y series
             $movie = [
+                'id' => $detalles['id'],
                 'titulo' => $detalles['title'] ?? $detalles['name'],
                 'poster_url' => 'https://image.tmdb.org/t/p/original' . $detalles['poster_path'],
                 'anho' => substr($detalles['release_date'] ?? $detalles['first_air_date'], 0, 4),
@@ -175,7 +178,18 @@ class ContenidoController extends Controller
                 'episodios' => $detalles['number_of_episodes'] ?? null,
             ];
             //dd($detalles);
-            return view('pages.contenido_detalle', compact('movie', 'tipo')); // Asegúrate de tener una vista 'contenido_detalle'
+
+
+            // Verifica si el contenido está en favoritos
+            $favorita = false;
+            if (Auth::check()) {
+                $favorita = Favorita::where('id_usuario', Auth::id())
+                                    ->where('id_contenido', $id)
+                                    ->exists();
+                    
+            }
+            
+            return view('pages.contenido_detalle', compact('movie', 'tipo', 'favorita')); // Asegúrate de tener una vista 'contenido_detalle'
         }
     }
 

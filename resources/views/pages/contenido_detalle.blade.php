@@ -37,10 +37,51 @@
                         <li><strong>Sinopsis:</strong> {{ $movie['resumen'] }}</li>
                     </ul>
                     <div>
-                        <button class="mt-4 bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-2 px-5 rounded-full transition">
-                            Crear Reseña
-                        </button>
+                        @auth
+                            <form action="{{ route('pelicula.favorita', ['tipo' => $tipo, 'id' => $movie['id']]) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="titulo" value="{{ $movie['titulo'] }}">
+                                <input type="hidden" name="tipo" value="{{ $tipo }}">
+                                <input type="hidden" name="id" value="{{ $movie['id'] }}">
+                                <button id="likeBtn" class="mt-4 bg-red-500 hover:bg-red-600 text-black font-medium py-2 px-5 rounded-full transition flex items-center gap-2">
+                                    @if ($favorita)
+                                        <button class="bg-green-500 text-black font-medium py-2 px-5 rounded-full transition">
+                                            ¡Añadida a favoritas!
+                                        </button>
+                                    @else
+                                        <button class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-5 rounded-full transition">
+                                            Añadir a favoritas
+                                        </button>
+                                    @endif
+                                </button>
+                            </form>
+                        @else
+                            <a href="/login">
+                                <button class="mt-4 bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-5 rounded-full transition">
+                                    ❤️ Me gusta
+                                </button>
+                            </a>
+                        @endauth
+
                     </div>
+
+                    {{-- GSAP Animation --}}
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+                    <script>
+                        const likeBtn = document.getElementById('likeBtn');
+                        if (likeBtn) {
+                            likeBtn.addEventListener('click', () => {
+                                gsap.to(likeBtn, {
+                                    scale: 1.2,
+                                    duration: 0.2,
+                                    yoyo: true,
+                                    repeat: 1,
+                                    ease: "power1.inOut"
+                                });
+                            });
+                        }
+                    </script>
+
                 </div>
 
                 {{-- Detalles Adicionales --}}

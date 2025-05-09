@@ -7,6 +7,8 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\FavoritasController;
+
 
 Route::get('/', function () {
     return view('pages.welcome');
@@ -25,7 +27,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/perfil/editar', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/perfil/editar', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/perfil', [ProfileController::class, 'index'])->name('perfil');
+
 });
+
+Route::post('/{tipo}/detalles/{id}/favorita', [FavoritasController::class, 'toggle'])->name('pelicula.favorita');
+
+
+
 
 Route::get('/{tipo}', [ContenidoController::class, 'abrirPagina'])
     ->whereIn('tipo', ['peliculas', 'series'])
