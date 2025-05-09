@@ -1,11 +1,10 @@
 @extends('layouts.layout')
 
 @section('title', $persona['nombre'] ?? 'Detalle de la Persona')
-<div id="container flex justify-center items-center w-full">
-
-            @include('components.buscador')
+           
 
 @section('content')
+@include('components.buscador')
     <div class="container mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="md:col-span-1 flex justify-center">
@@ -13,7 +12,7 @@
                     <img src="{{ $persona['foto_perfil'] }}" alt="Foto de {{ $persona['nombre'] }}" class="rounded-md w-full h-auto">
                 @else
                     <div class="w-48 h-72 bg-gray-200 rounded-md flex items-center justify-center">
-                        <span class="text-gray-500">No hay foto disponible</span>
+                        <img src="{{ asset('images/portada_404.png') }}" alt="Foto no disponible" class="rounded-md w-full h-auto">
                     </div>
                 @endif
             </div>
@@ -61,8 +60,8 @@
                     @foreach ($persona['peliculas_series'] as $trabajo)
                         <div class="bg-gray-100 rounded-md shadow-sm p-4">
                             @if ($trabajo['poster_url'])
-                                <a href="/{{$trabajo['tipo']}}/{{$trabajo['id']}}">
-                                    <img src="{{ $trabajo['poster_url'] }}" alt="{{ $trabajo['titulo'] }}" class="rounded-md w-full h-auto mb-2">
+                                <a href="/{{$trabajo['tipo']}}/detalles/{{$trabajo['id']}}">
+                                    <img src="{{ $trabajo['poster_url'] ?: asset('images/portada_404.png') }}" alt="{{ $trabajo['titulo'] }}" class="rounded-md w-full h-auto mb-2">
                                 </a>
                             @else
                                 <div class="w-full h-32 bg-gray-200 rounded-md flex items-center justify-center mb-2">

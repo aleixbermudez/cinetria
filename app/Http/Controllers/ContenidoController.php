@@ -148,16 +148,34 @@ class ContenidoController extends Controller
                             'id' => $genero['id'],
                         ];
                     }),
+                'equipo' => collect($this->obtenerContenidoDesdeAPI("https://api.themoviedb.org/3/{$tipo_api}/{$id}/credits?language=es-ES")['crew'])
+                    ->take(5)
+                    ->map(function ($equipo) {
+                        $cargoTraducido = match ($equipo['job']) {
+                            'Writer' => 'Escritor',
+                            'Producer' => 'Productor',
+                            'Director' => 'Director',
+                            default => $equipo['job'],
+                        };
+                        return [
+                            'id' => $equipo['id'],
+                            'nombre' => $equipo['name'],
+                            'cargo' => $cargoTraducido,
+                            'foto' => $equipo['profile_path'] ? 'https://image.tmdb.org/t/p/w500' . $equipo['profile_path'] : null,
+                        ];
+                    }),
                 'trailer' => $this->obtenerContenidoDesdeAPI("https://api.themoviedb.org/3/{$tipo_api}/{$id}/videos?language=es-ES")['results'][0]['key'] ?? null,
                 'duracion' => $detalles['runtime'] ?? $detalles['episode_run_time'][0] ?? 0,
                 'productora' => $detalles['production_companies'][0]['name'] ?? 'Desconocida',
                 'idioma_original' => strtoupper($detalles['original_language']),
-                'presupuesto' => $detalles['budget'] ?? 0,
-                'recaudacion' => $detalles['revenue'] ?? 0,
+                'presupuesto' => isset($detalles['budget']) && $detalles['budget'] > 0 ? number_format($detalles['budget'], 0, ',', '.') . ' €' : 'No disponible',
+                'recaudacion' => isset($detalles['revenue']) && $detalles['revenue'] > 0 ? number_format($detalles['revenue'], 0, ',', '.') . ' €' : 'No disponible',
                 'fecha_estreno' => $detalles['release_date'] ?? $detalles['first_air_date'],
+                'temporadas' => $detalles['number_of_seasons'] ?? null,
+                'episodios' => $detalles['number_of_episodes'] ?? null,
             ];
             //dd($detalles);
-            return view('pages.contenido_detalle', compact('movie'));
+            return view('pages.contenido_detalle', compact('movie', 'tipo')); // Asegúrate de tener una vista 'contenido_detalle'
         }
     }
 
@@ -175,19 +193,6 @@ class ContenidoController extends Controller
         $url = "https://api.themoviedb.org/3/{$tipo_api}/{$id}?language=es-ES";
 
         return $this->obtenerContenidoDesdeAPI($url);
-    }
-
-
-
-
-    private function obtenerDirector($crew)
-    {
-        foreach ($crew as $persona) {
-            if ($persona['job'] === 'Director') {
-                return $persona['name'];
-            }
-        }
-        return 'Desconocido';
     }
 
 

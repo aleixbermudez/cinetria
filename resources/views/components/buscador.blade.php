@@ -75,7 +75,7 @@
 
             html += `
               <div class="hover:bg-gray-100 dark:hover:bg-neutral-700 cursor-pointer p-2">
-                <a href="/${tipo}/${item.id}" class="flex items-center gap-3">
+                <a href="/${tipo}/detalles/${item.id}" class="flex items-center gap-3">
                     <img src="${imagen ? `https://image.tmdb.org/t/p/w92${imagen}` : '/images/portada_404.png'}" class="w-12 h-auto rounded shadow-sm" alt="${nombre}">
                   <span class="text-sm font-medium text-gray-800 dark:text-white">${nombre}</span>
                 </a>

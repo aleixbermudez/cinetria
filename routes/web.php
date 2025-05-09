@@ -30,7 +30,7 @@ Route::get('/{tipo}', [ContenidoController::class, 'abrirPagina'])
     ->whereIn('tipo', ['peliculas', 'series'])
     ->name('contenido');
 
-Route::get('/{tipo}/{id}', [ContenidoController::class, 'abrirPaginaDetalle']);
+Route::get('/{tipo}/detalles/{id}', [ContenidoController::class, 'abrirPaginaDetalle']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/foro', function () {
@@ -45,7 +45,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     })->name('admin');
 
     Route::middleware(['auth', 'role:admin'])->group(function () {
-        Route::get('/admin/users/a', [DashboardController::class, 'ListaUsuarios'])->name('admin-users');
+        Route::get('/admin/users', [DashboardController::class, 'ListaUsuarios'])->name('admin-users');
     });
 
     Route::get('/admin/resenhas/a', function () {

@@ -36,14 +36,41 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const tipo = '{{ $tipo }}';
     let tipo_api = tipo === 'peliculas' ? 'movie' : 'tv';
-    let idioma = tipo === 'peliculas' ? 'en' : 'es';
 
-    const url = `https://api.themoviedb.org/3/genre/${tipo_api}/list?language=${idioma}`;
+    const url = `https://api.themoviedb.org/3/genre/${tipo_api}/list?language=es_ES`;
 
     const generosContainer = document.getElementById('generos-container');
     const btnLimpiar = document.getElementById('limpiar-filtros');
     const resultadosContainer = document.getElementById('resultados-container');
-
+    const traduccionesGeneros = {
+        "Action": "Acción",
+        "Adventure": "Aventura",
+        "Animation": "Animación",
+        "Comedy": "Comedia",
+        "Crime": "Crimen",
+        "Documentary": "Documental",
+        "Drama": "Drama",
+        "Family": "Familiar",
+        "Fantasy": "Fantasía",
+        "History": "Historia",
+        "Horror": "Terror",
+        "Music": "Música",
+        "Mystery": "Misterio",
+        "Romance": "Romance",
+        "Science Fiction": "Ciencia Ficción",
+        "TV Movie": "Película de TV",
+        "Thriller": "Suspenso",
+        "War": "Guerra",
+        "Western": "Occidental",
+        "Action & Adventure": "Acción y Aventura",
+        "Kids": "Infantil",
+        "News": "Noticias",
+        "Reality": "Reality",
+        "Sci-Fi & Fantasy": "Ciencia Ficción y Fantasía",
+        "Soap": "Telenovela",
+        "Talk": "Charla",
+        "War & Politics": "Guerra y Política"
+    };
     let generosSeleccionados = [];
     let generosMap = {};
 
@@ -75,8 +102,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         const generoElement = document.createElement('div');
                         generoElement.className = 'genero-item border border-gray-200 rounded-md p-1 cursor-pointer hover:bg-gray-50 transition-colors duration-200 text-xs';
                         generoElement.dataset.id = genero.id;
-                        generoElement.dataset.nombre = genero.name;
-                        generoElement.textContent = genero.name;
+                        generoElement.dataset.nombre = traduccionesGeneros[genero.name] || genero.name;
+                        generoElement.textContent = traduccionesGeneros[genero.name] || genero.name;
 
                         if (generosSeleccionados.includes(genero.id.toString())) {
                             generoElement.classList.add('bg-yellow-200', 'border-yellow-500', 'font-medium');

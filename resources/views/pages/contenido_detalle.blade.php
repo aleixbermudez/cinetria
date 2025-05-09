@@ -52,10 +52,15 @@
                                 {{ $genero['nombre'] }}@if (!$loop->last), @endif
                             @endforeach
                         </li>
-                        <li><strong>Duración:</strong> {{ $movie['duracion'] }} minutos</li>
+                        @if ($tipo == 'series')
+                            <li><strong>Temporadas:</strong> {{ $movie['temporadas'] }}</li>
+                            <li><strong>Episodios totales:</strong> {{ $movie['episodios'] }}</li>
+                        @elseif ($tipo == 'peliculas')
+                            <li><strong>Duración:</strong> {{ $movie['duracion'] }} minutos</li>
+                            <li><strong>Presupuesto:</strong> {{ $movie['presupuesto'] }} </li>
+                            <li><strong>Recaudación:</strong> {{ $movie['recaudacion'] }} </li>
+                        @endif
                         <li><strong>Idioma Original:</strong> {{ $movie['idioma_original'] }}</li>
-                        <li><strong>Presupuesto:</strong> {{ $movie['presupuesto'] }}</li>
-                        <li><strong>Recaudación:</strong> {{ $movie['recaudacion'] }}</li>
                         <li><strong>Fecha de Estreno:</strong> {{ $movie['fecha_estreno'] }}</li>
                     </ul>
                 </div>
@@ -68,9 +73,10 @@
             <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
                 @foreach ($movie['reparto'] as $actor)
                     <li class="text-center space-y-2">
-                        <a href="/personas/{{ $actor['id'] }}" class="block">
+                        <a href="/personas/detalles/{{ $actor['id'] }}" class="block">
                             {{-- Si no hay foto, mostrar una imagen por defecto --}}
-                            <img src="{{ $actor['foto'] }}" alt="Foto de {{ $actor['nombre'] }}"
+                            <img src="{{ $actor['foto'] ?? asset('images/portada_404.png') }}" 
+                                alt="Foto de {{ $actor['nombre'] }}"
                                 class="w-20 h-20 object-cover rounded-full mx-auto shadow">
                             <div class="text-gray-900 dark:text-white font-medium">
                                 {{ $actor['nombre'] }}
@@ -83,6 +89,30 @@
                 @endforeach
             </ul>
         </div>
+         @if ($tipo == 'peliculas')
+            {{-- Equipo --}}
+            <div class="bg-white dark:bg-neutral-800 rounded-2xl shadow p-6">
+                <h2 class="text-2xl font-semibold text-gray-900 dark:text-white text-center mb-8">Equipo</h2>
+                <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                    @foreach ($movie['equipo'] as $miembro)
+                        <li class="text-center space-y-2">
+                            <a href="/personas/detalles/{{ $miembro['id'] }}" class="block">
+                                {{-- Si no hay foto, mostrar una imagen por defecto --}}
+                                <img src="{{ $miembro['foto'] ?? asset('images/portada_404.png') }}" 
+                                    alt="Foto de {{ $miembro['nombre'] }}"
+                                    class="w-20 h-20 object-cover rounded-full mx-auto shadow">
+                                <div class="text-gray-900 dark:text-white font-medium">
+                                    {{ $miembro['nombre'] }}
+                                </div>
+                                <div class="text-gray-500 dark:text-neutral-400 text-sm">
+                                    {{ $miembro['cargo'] }}
+                                </div>
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     </div>
 </div>
 @endsection

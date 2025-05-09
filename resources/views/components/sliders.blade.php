@@ -31,7 +31,7 @@
         <div class="swiper-wrapper">
             @foreach(collect($populares["results"])->sortByDesc('vote_average') as $popular)
                 <div class="swiper-slide p-4 text-center bg-white transition-transform duration-300 hover:scale-105" style="width: 250px !important;">
-                    <a href="/{{$tipo}}/{{$popular['id']}}">
+                    <a href="{{$tipo}}/detalles/{{$popular['id']}}">
                     <img src="https://image.tmdb.org/t/p/w200{{$popular['poster_path']}}" 
                          alt="{{$popular['title'] ?? $popular['name']}}" 
                          class="w-40 h-auto mx-auto mb-4 rounded-lg shadow-sm">
@@ -51,7 +51,7 @@
         <div class="swiper-wrapper">
             @foreach(collect($mejores["results"])->sortByDesc('vote_average') as $mejor)
                 <div class="swiper-slide p-4 text-center bg-white transition-transform duration-300 hover:scale-105" style="width: 250px !important;">
-                    <a href="/{{$tipo}}/{{$mejor['id']}}">
+                    <a href="{{$tipo}}/detalles/{{$mejor['id']}}">
                     <img src="https://image.tmdb.org/t/p/w200{{$mejor['poster_path']}}" 
                          alt="{{$mejor['title'] ?? $mejor['name']}}" 
                          class="w-40 h-auto mx-auto mb-4 rounded-lg shadow-sm">
@@ -67,12 +67,12 @@
 
 <!-- ESTRENOS -->
 <div id="slider-estrenos" class="mt-6 hidden">
-    <h3 class="text-center text-2xl font-extrabold mt-8 text-black">{{$texto_mostrar}}</h3>
+    <h3 class="text-center text-2xl font-extrabold mt-8 text-black">{{ strtoupper($texto_mostrar) }}</h3>
     <div class="swiper mejores-slider mt-6 px-6">
         <div class="swiper-wrapper">
             @foreach(collect($estrenos["results"])->sortByDesc('vote_average') as $estreno)
                 <div class="swiper-slide p-4 text-center bg-white transition-transform duration-300 hover:scale-105" style="width: 250px !important;">
-                    <a href="/{{$tipo}}/{{$estreno['id']}}">
+                    <a href="{{$tipo}}/detalles/{{$estreno['id']}}">
                     <img src="https://image.tmdb.org/t/p/w200{{$estreno['poster_path']}}" 
                          alt="{{$estreno['title'] ?? $estreno['name']}}" 
                          class="w-40 h-auto mx-auto mb-4 rounded-lg shadow-sm">
@@ -118,28 +118,36 @@
         btnPopulares.addEventListener('click', function () {
             sliderPopulares.classList.remove('hidden');
             sliderMejores.classList.add('hidden');
+            sliderEstrenos.classList.add('hidden');
             btnPopulares.classList.add('bg-yellow-400', 'text-white');
             btnPopulares.classList.remove('bg-gray-100', 'text-gray-800');
             btnMejores.classList.add('bg-gray-100', 'text-gray-800');
-            btnMejores.classList.remove('bg-amber-500', 'text-white');
+            btnMejores.classList.remove('bg-yellow-400', 'text-white');
+            btnEstrenos.classList.add('bg-gray-100', 'text-gray-800');
+            btnEstrenos.classList.remove('bg-yellow-400', 'text-white');
         });
 
         btnMejores.addEventListener('click', function () {
             sliderMejores.classList.remove('hidden');
             sliderPopulares.classList.add('hidden');
-            btnMejores.classList.add('bg-amber-500', 'text-white');
+            sliderEstrenos.classList.add('hidden');
+            btnMejores.classList.add('bg-yellow-400', 'text-white');
             btnMejores.classList.remove('bg-gray-100', 'text-gray-800');
             btnPopulares.classList.add('bg-gray-100', 'text-gray-800');
             btnPopulares.classList.remove('bg-yellow-400', 'text-white');
+            btnEstrenos.classList.add('bg-gray-100', 'text-gray-800');
+            btnEstrenos.classList.remove('bg-yellow-400', 'text-white');
         });
         btnEstrenos.addEventListener('click', function () {
             sliderEstrenos.classList.remove('hidden');
             sliderPopulares.classList.add('hidden');
             sliderMejores.classList.add('hidden');
-            btnEstrenos.classList.add('bg-amber-500', 'text-white');
+            btnEstrenos.classList.add('bg-yellow-400', 'text-white');
             btnEstrenos.classList.remove('bg-gray-100', 'text-gray-800');
             btnPopulares.classList.add('bg-gray-100', 'text-gray-800');
             btnPopulares.classList.remove('bg-yellow-400', 'text-white');
+            btnMejores.classList.add('bg-gray-100', 'text-gray-800');
+            btnMejores.classList.remove('bg-yellow-400', 'text-white');
         });
     });
 </script>
