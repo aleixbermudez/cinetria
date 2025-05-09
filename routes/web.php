@@ -27,7 +27,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/perfil/editar', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/perfil/editar', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/perfil', [ProfileController::class, 'index'])->name('perfil');
-
 });
 
 Route::post('/{tipo}/detalles/{id}/favorita', [FavoritasController::class, 'toggle'])->name('pelicula.favorita');
@@ -57,17 +56,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/users', [DashboardController::class, 'ListaUsuarios'])->name('admin-users');
     });
 
+    Route::put('/admin/users/edit/{user}', [DashboardController::class, 'update']);
+
     Route::get('/admin/resenhas/a', function () {
         return view('pages.dashboard.resenhas');
     })->name('admin-resenhas');
+
+    Route::delete('/admin/users/delete/{id}', [DashboardController::class, 'delete'])->name('users.delete');
+
 });
-
-
-
-
-
-
-
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->name('logout');

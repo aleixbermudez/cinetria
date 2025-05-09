@@ -63,6 +63,10 @@
                             </a>
                         @endauth
 
+                        {{-- Siempre se muestra el botón de "Crear Reseña", sin importar si está logeado --}}
+                        <button id="crear-resena-btn" class="mt-4 bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-2 px-5 rounded-full transition">
+                            Crear Reseña
+                        </button>
                     </div>
 
                     {{-- GSAP Animation --}}
@@ -115,7 +119,6 @@
                 @foreach ($movie['reparto'] as $actor)
                     <li class="text-center space-y-2">
                         <a href="/personas/detalles/{{ $actor['id'] }}" class="block">
-                            {{-- Si no hay foto, mostrar una imagen por defecto --}}
                             <img src="{{ $actor['foto'] ?? asset('images/portada_404.png') }}" 
                                 alt="Foto de {{ $actor['nombre'] }}"
                                 class="w-20 h-20 object-cover rounded-full mx-auto shadow">
@@ -130,30 +133,95 @@
                 @endforeach
             </ul>
         </div>
-         @if ($tipo == 'peliculas')
-            {{-- Equipo --}}
-            <div class="bg-white dark:bg-neutral-800 rounded-2xl shadow p-6">
-                <h2 class="text-2xl font-semibold text-gray-900 dark:text-white text-center mb-8">Equipo</h2>
-                <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                    @foreach ($movie['equipo'] as $miembro)
-                        <li class="text-center space-y-2">
-                            <a href="/personas/detalles/{{ $miembro['id'] }}" class="block">
-                                {{-- Si no hay foto, mostrar una imagen por defecto --}}
-                                <img src="{{ $miembro['foto'] ?? asset('images/portada_404.png') }}" 
-                                    alt="Foto de {{ $miembro['nombre'] }}"
-                                    class="w-20 h-20 object-cover rounded-full mx-auto shadow">
-                                <div class="text-gray-900 dark:text-white font-medium">
-                                    {{ $miembro['nombre'] }}
-                                </div>
-                                <div class="text-gray-500 dark:text-neutral-400 text-sm">
-                                    {{ $miembro['cargo'] }}
-                                </div>
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
+
+        @if ($tipo == 'peliculas')
+        {{-- Equipo --}}
+        <div class="bg-white dark:bg-neutral-800 rounded-2xl shadow p-6">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white text-center mb-8">Equipo</h2>
+            <ul class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                @foreach ($movie['equipo'] as $miembro)
+                    <li class="text-center space-y-2">
+                        <a href="/personas/detalles/{{ $miembro['id'] }}" class="block">
+                            <img src="{{ $miembro['foto'] ?? asset('images/portada_404.png') }}" 
+                                alt="Foto de {{ $miembro['nombre'] }}"
+                                class="w-20 h-20 object-cover rounded-full mx-auto shadow">
+                            <div class="text-gray-900 dark:text-white font-medium">
+                                {{ $miembro['nombre'] }}
+                            </div>
+                            <div class="text-gray-500 dark:text-neutral-400 text-sm">
+                                {{ $miembro['cargo'] }}
+                            </div>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
         @endif
     </div>
 </div>
+
+{{-- SweetAlert2 CDN --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{{-- Modal de reseña --}}
+<script>
+    document.getElementById('crear-resena-btn').addEventListener('click', function () {
+        // Verificamos si el usuario está logeado utilizando una variable global de PHP
+        @auth
+            Swal.fire({
+                title: 'Escribe tu reseña',
+                html: `
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                        <input id="titulo" class="swal2-input" value="{{ $movie['titulo'] }}" disabled style="width: 100%; background-color: #f3f4f6; color: #6b7280; font-weight: 500;">
+                        <textarea id="contenido" class="swal2-textarea" placeholder="¿Qué te ha parecido?" style="width: 100%; resize: vertical;"></textarea>
+                        <label for="valoracion" style="font-weight: 500;">Puntuación:</label>
+                        <input type="range" id="valoracion" min="1" max="10" value="5" step="1" style="width: 100%; margin-bottom: 10px;">
+                        <div id="valor-valoracion" style="font-size: 16px; font-weight: bold; text-align: center; color: #4B5563;">5</div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonColor: '#10B981',
+                cancelButtonColor: '#EF4444',
+                confirmButtonText: 'Guardar reseña',
+                cancelButtonText: 'Cancelar',
+                focusConfirm: false,
+                preConfirm: () => {
+                    const contenido = document.getElementById('contenido').value.trim();
+                    const valoracion = document.getElementById('valoracion').value;
+
+                    if (!contenido || !valoracion) {
+                        Swal.showValidationMessage('Por favor, escribe una reseña y selecciona una puntuación.');
+                        return false;
+                    }
+
+                    // Simulamos guardado
+                    return {
+                        titulo: '{{ $movie['titulo'] }}',
+                        contenido,
+                        valoracion
+                    };
+                }
+            }).then(result => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Reseña guardada!',
+                        text: 'Gracias por compartir tu opinión.',
+                        timer: 2500,
+                        showConfirmButton: false
+                    });
+                    console.log('Reseña:', result.value);
+                }
+            });
+
+            // Manejador de evento para mostrar el valor de la puntuación
+            document.getElementById('valoracion').addEventListener('input', function() {
+                document.getElementById('valor-valoracion').textContent = this.value;
+            });
+        @else
+            // Si el usuario no está logeado, redirige al login
+            window.location.href = '/login';
+        @endauth
+    });
+</script>
 @endsection

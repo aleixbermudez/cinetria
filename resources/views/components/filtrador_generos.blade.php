@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             html += `
             <div class="relative group overflow-hidden rounded-lg shadow hover:shadow-lg transition duration-300">
-                <a href="/${tipo}/${item.id}">
+                <a href="/${tipo}/detalles/${item.id}">
                     <img src="${posterPath}" alt="${titulo}" class="w-full h-auto object-cover block transition-transform duration-300 group-hover:scale-105">
                     <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white text-xs px-2 py-1 text-center truncate">
                         ${titulo} • ${fecha ? new Date(fecha).getFullYear() : 'Año desconocido'}

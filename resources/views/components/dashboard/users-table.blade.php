@@ -1,122 +1,175 @@
-<!-- Contenedor principal con bordes redondeados -->
+<!-- Tabla de Usuarios -->
 <div class="overflow-hidden rounded-2xl border border-gray-200 dark:border-neutral-700">
-    <!-- Table -->
     <table class="min-w-full divide-y divide-gray-200 dark:divide-neutral-700">
         <thead class="bg-gray-50 dark:bg-neutral-800">
             <tr>
-                <th scope="col" class="ps-6 py-3 text-start">
-                    <label for="hs-at-with-checkboxes-main" class="flex">
-                        <input type="checkbox"
-                            class="shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                            id="hs-at-with-checkboxes-main">
-                        <span class="sr-only">Checkbox</span>
-                    </label>
-                </th>
-                <th scope="col" class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3 text-start">
-                    <div class="flex items-center gap-x-2">
-                        <span class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                            Nombre
-                        </span>
-                    </div>
-                </th>
-                <th scope="col" class="px-6 py-3 text-start">
-                    <div class="flex items-center gap-x-2">
-                        <span class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                            Número de reseñas
-                        </span>
-                    </div>
-                </th>
-                <th scope="col" class="px-6 py-3 text-start">
-                    <div class="flex items-center gap-x-2">
-                        <span class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                            Verificado
-                        </span>
-                    </div>
-                </th>
-                <th scope="col" class="px-6 py-3 text-start">
-                    <div class="flex items-center gap-x-2">
-                        <span class="text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">
-                            Fecha de alta
-                        </span>
-                    </div>
-                </th>
-                <th scope="col" class="px-6 py-3 text-end"></th>
+                <th class="ps-6 py-3"></th>
+                <th class="ps-6 py-3 text-start text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">Nombre</th>
+                <th class="px-6 py-3 text-start text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">Número de reseñas</th>
+                <th class="px-6 py-3 text-start text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">Verificado</th>
+                <th class="px-6 py-3 text-start text-xs font-semibold uppercase text-gray-800 dark:text-neutral-200">Fecha de alta</th>
+                <th class="px-6 py-3 text-end"></th>
             </tr>
         </thead>
 
         <tbody class="divide-y divide-gray-200 dark:divide-neutral-700">
             @foreach ($users as $user)
-            <tr>
-                <td class="size-px whitespace-nowrap">
-                    <div class="ps-6 py-3">
-                        <label for="user-checkbox-{{ $user->id }}" class="flex">
-                            <input type="checkbox"
-                                class="shrink-0 border-gray-300 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-600 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-                                id="user-checkbox-{{ $user->id }}">
-                            <span class="sr-only">Checkbox</span>
-                        </label>
-                    </div>
-                </td>
-                <td class="size-px whitespace-nowrap">
-                    <div class="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
-                        <div class="flex items-center gap-x-3">
-                            <div class="grow">
-                                <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
-                                    {{ $user->name }}
-                                </span>
-                                <span class="block text-sm text-gray-500 dark:text-neutral-500">
-                                    {{ $user->email }}
-                                </span>
-                            </div>
+                <tr>
+                    <td class="ps-6 py-3">
+                        <input type="checkbox" class="border-gray-300 rounded-sm text-blue-600 dark:bg-neutral-800 dark:border-neutral-600">
+                    </td>
+                    <td class="ps-6 py-3">
+                        <div>
+                            <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">{{ $user->name }}</span>
+                            <span class="block text-sm text-gray-500 dark:text-neutral-500">{{ $user->email }}</span>
                         </div>
-                    </div>
-                </td>
-                <td class="h-px w-72 whitespace-nowrap">
-                    <div class="px-6 py-3">
-                        <span class="block text-sm font-semibold text-gray-800 dark:text-neutral-200">
-                            500
-                        </span>
-                    </div>
-                </td>
-                <td class="size-px whitespace-nowrap">
-                    <div class="px-6 py-3">
+                    </td>
+                    <td class="px-6 py-3 text-sm font-semibold text-gray-800 dark:text-neutral-200">
+                        {{ $user->reviews_count ?? 0 }}
+                    </td>
+                    <td class="px-6 py-3">
                         @if ($user->verified)
-                        <span
-                            class="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">
-                            <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                fill="currentColor" viewBox="0 0 16 16">
-                                <path
-                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                            </svg>
-                            Verificado
-                        </span>
+                            <span class="py-1 px-1.5 inline-flex items-center text-xs font-medium bg-teal-100 text-teal-800 rounded-full dark:bg-teal-500/10 dark:text-teal-500">Verificado</span>
                         @else
-                        <span class="text-sm text-gray-500 dark:text-neutral-500">No verificado</span>
+                            <span class="text-sm text-gray-500 dark:text-neutral-500">No verificado</span>
                         @endif
-                    </div>
-                </td>
-                <td class="size-px whitespace-nowrap">
-                    <div class="px-6 py-3">
-                        <span class="text-sm text-gray-500 dark:text-neutral-500">
-                            {{ $user->created_at->format('d M, H:i') }}
-                        </span>
-                    </div>
-                </td>
-                <td class="size-px whitespace-nowrap">
-                    <div class="px-6 py-1.5">
-                        <a class="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline focus:outline-hidden focus:underline font-medium dark:text-blue-500"
-                            href="#">
-                            Edit
+                    </td>
+                    <td class="px-6 py-3 text-sm text-gray-500 dark:text-neutral-500">
+                        {{ $user->created_at->format('d M, H:i') }}
+                    </td>
+                    <td class="px-6 py-3 text-end">
+                        <a href="#"
+                           onclick="editUser(
+                               {{ $user->id }},
+                               '{{ e($user->name) }}',
+                               '{{ e($user->email) }}',
+                               {{ $user->reviews_count ?? 0 }},
+                               '{{ $user->created_at->format('Y-m-d H:i:s') }}'
+                           )"
+                           class="text-sm text-blue-600 hover:underline font-medium dark:text-blue-500">Edit
                         </a>
-                    </div>
-                </td>
-            </tr>
+                        <a href="#" 
+                            onclick="deleteUser({{ $user->id }})"
+                            class="text-sm ml-4 text-red-600 hover:underline font-medium dark:text-red-500">Eliminar
+                        </a>
+                    </td>
+                </tr>
             @endforeach
         </tbody>
     </table>
 
-    <!-- Total de usuarios -->
     <div class="bg-gray-50 dark:bg-neutral-800 px-6 py-4 text-sm text-gray-700 dark:text-neutral-300 border-t border-gray-200 dark:border-neutral-700">
         Total de usuarios: <span class="font-semibold">{{ count($users) }}</span>
     </div>
 </div>
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+
+    function deleteUser(id) {
+        Swal.fire({
+            title: '¿Seguro que quieres eliminarlo?',
+            text: "¡No podrás revertir esta acción!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            focusConfirm: false,
+            customClass: {
+                popup: 'text-left'
+            },
+            preConfirm: () => {
+                return fetch(`/admin/users/delete/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('No se pudo eliminar el usuario');
+                    return response.json();
+                })
+                .then(() => {
+                    Swal.fire('Eliminado', 'El usuario ha sido eliminado correctamente.', 'success')
+                        .then(() => location.reload());
+                })
+                .catch(err => {
+                    Swal.showValidationMessage(`Error: ${err.message}`);
+                });
+            }
+        });
+    }
+
+
+    function editUser(id, name, email, reviewsCount, createdAt) {
+        Swal.fire({
+            title: 'Editar Usuario',
+            html: `
+                <div style="display: flex; flex-direction: column; gap: 1rem; text-align: left;">
+                    <div>
+                        <label style="font-weight: 600; font-size: 0.9rem;">Nombre</label>
+                        <input id="swal-name" class="swal2-input" placeholder="Nombre completo" value="${name}">
+                    </div>
+
+                    <div>
+                        <label style="font-weight: 600; font-size: 0.9rem;">Email</label>
+                        <input id="swal-email" type="email" class="swal2-input" placeholder="Correo electrónico" value="${email}">
+                    </div>
+
+                    <div>
+                        <label style="font-weight: 600; font-size: 0.9rem;">Número de reseñas</label>
+                        <input id="swal-reviews" class="swal2-input" value="${reviewsCount}" disabled>
+                    </div>
+
+                    <div>
+                        <label style="font-weight: 600; font-size: 0.9rem;">Fecha de alta</label>
+                        <input id="swal-created" class="swal2-input" value="${createdAt}" disabled>
+                    </div>
+                </div>
+            `,
+            showCancelButton: true,
+            confirmButtonText: 'Guardar cambios',
+            cancelButtonText: 'Cancelar',
+            focusConfirm: false,
+            customClass: {
+                popup: 'text-left'
+            },
+            preConfirm: () => {
+                const newName = document.getElementById('swal-name').value.trim();
+                const newEmail = document.getElementById('swal-email').value.trim();
+
+                if (!newName || !newEmail) {
+                    Swal.showValidationMessage('Nombre y email no pueden estar vacíos');
+                    return false;
+                }
+
+                return fetch(`/admin/users/edit/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        name: newName,
+                        email: newEmail
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('No se pudo actualizar el usuario');
+                    return response.json();
+                })
+                .then(() => {
+                    Swal.fire('Actualizado', 'El usuario ha sido modificado correctamente.', 'success')
+                        .then(() => location.reload());
+                })
+                .catch(err => {
+                    Swal.showValidationMessage(`Error: ${err.message}`);
+                });
+            }
+        });
+    }
+</script>
