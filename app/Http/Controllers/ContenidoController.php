@@ -183,17 +183,14 @@ class ContenidoController extends Controller
 
             // Verifica si el contenido está en favoritos
             $favorita = false;
+            $resenhaExistente = false; // Initialize the variable to avoid undefined variable error
             if (Auth::check()) {
                 $favorita = Favorita::where('id_usuario', Auth::id())
                                     ->where('id_contenido', $id)
                                     ->exists();
-                    $resenhaExistente = false;
-                    if (Auth::check()) {
-                        $resenhaExistente = Resenha::where('id_usuario', Auth::id())
-                                                               ->where('id_contenido', $id)
-                                                               ->exists();
-                        
-                    }
+                $resenhaExistente = Resenha::where('id_usuario', Auth::id())
+                                           ->where('id_contenido', $id)
+                                           ->exists();
             }
             
             return view('pages.contenido_detalle', compact('movie', 'tipo', 'favorita', 'resenhaExistente')); // Asegúrate de tener una vista 'contenido_detalle'

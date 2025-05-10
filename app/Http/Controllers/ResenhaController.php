@@ -55,6 +55,12 @@ class ResenhaController extends Controller
 
         return $salida;
     }
+
+    public function foro()
+    {
+        $resenhas = Resenha::with('usuario')->latest()->get(); // Asume que tienes relación con User
+        return view('pages.foro', compact('resenhas'));
+    }
     // Opciones para crear, modificar, eliminar o mostrar reseñas ( CRUD)
     function mostrarResenha($id)
     {

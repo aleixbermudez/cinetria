@@ -48,9 +48,8 @@ Route::get('/{tipo}', [ContenidoController::class, 'abrirPagina'])
 Route::get('/{tipo}/detalles/{id}', [ContenidoController::class, 'abrirPaginaDetalle']);
 
 Route::middleware('auth')->group(function () {
-    Route::get('/foro', function () {
-        return view('pages.foro');
-    })->name('foro');
+    Route::get('/foro', [ResenhaController::class, 'foro'])->name('foro');
+
 });
 
 
