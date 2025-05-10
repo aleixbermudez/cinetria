@@ -3,70 +3,93 @@
 
 @section('content')
 
-<div class="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-    <h1 class="text-2xl font-bold text-gray-800 mb-4">Mi Perfil</h1>
-    <div class="flex items-center space-x-4 mb-6">
-        <div>
-            <h2 class="text-xl font-semibold text-gray-700">{{$user->name}}</h2>
-            <p class="text-gray-500">{{$user->email}}</p>
-        </div>
-    </div>
-    <div class="space-y-4">
-        @if($resenhas->count())
-            <table class="table-auto w-full border-collapse border border-gray-300">
-                <thead>
-                    MIS RESEÑAS 
-                </thead>
-                <tbody>
-                    @foreach($resenhas as $resenha)
-                        <tr>
-                            <td class="border border-gray-300 px-4 py-2">
-                                <img src="" alt="Cargando..." class="w-16 h-16 object-cover" id="imagen-resenha-{{ $resenha->id }}">
-                            </td>
-                            <td class="border border-gray-300 px-4 py-2" id="titulo-{{ $resenha->id }}"></td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $resenha->valoracion }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $resenha->opinion_texto }}</td>
-                        </tr>
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                const tipo = '{{ $resenha->tipo_contenido }}'; // 'movie' o 'tv'
-                                const id = '{{ $resenha->id_contenido }}';
-                                const filaId = '{{ $resenha->id }}'; // ID único de la reseña
-
-                                fetch(`https://api.themoviedb.org/3/${tipo}/${id}?language=es-ES`, {
-                                    method: 'GET',
-                                    headers: {
-                                        accept: 'application/json',
-                                        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4OGEzMjE5MTAxNTZiZWFlZWY1MzBlYzNhMmQxNTg5MSIsIm5iZiI6MTczODMxNjcyMS4yNjgsInN1YiI6IjY3OWM5YmIxODIyZTdkMzJmN2JkZTg2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.TnYuqSvLds-SafDDSVYFrCieAvhOqtG0kstT95IPt1s'
-                                    }
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    const titulo = tipo === 'movie' ? data.title : data.name;
-                                    const imagen = data.poster_path
-                                        ? `https://image.tmdb.org/t/p/w500${data.poster_path}`
-                                        : 'https://via.placeholder.com/100x150?text=No+Imagen';
-
-                                    document.getElementById('titulo-' + filaId).innerText = titulo;
-                                    document.getElementById('imagen-resenha-' + filaId).src = imagen;
-                                })
-                                .catch(err => console.error('Error al obtener datos de TMDB:', err));
-                            });
-                        </script>
-                    @endforeach
-                </tbody>
-
-            </table>
-            <div class="mt-4">
-                {{ $resenhas->links() }}
-            </div>
-        @else
-            <p class="text-gray-500">No hay reseñas disponibles.</p>
-        @endif
-    <div class="mt-6">
-        <a href="{{ url('perfil/editar') }}" class="inline-block px-6 py-2 text-black bg-blue-500 hover:bg-blue-600 rounded-lg shadow-md">
+<div class="max-w-4xl mx-auto mt-10 p-8 bg-white rounded-2xl shadow-lg">
+    <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-semibold text-gray-900">Mi Perfil</h1>
+        <a href="{{ url('perfil/editar') }}" class="text-gray-600 hover:text-gray-800 transition-colors flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4V2m4 4l-1 1m-4 2l1-1m4 4l-1 1m-4 2l1-1m2 2l-1 1" />
+            </svg>
             Editar Perfil
         </a>
+    </div>
+
+    <div class="mb-8">
+        <h2 class="text-2xl font-semibold text-gray-900">{{ $user->name }}</h2>
+        <p class="text-gray-500">{{ $user->email }}</p>
+    </div>
+
+    <div class="space-y-8">
+        @if($resenhas->count())
+            <div class="overflow-hidden bg-white rounded-lg shadow-md">
+                <table class="min-w-full text-sm text-left text-gray-700">
+                    <thead class="bg-indigo-600 text-white">
+                        <tr>
+                            <th class="px-6 py-3">Imagen</th>
+                            <th class="px-6 py-3">Título</th>
+                            <th class="px-6 py-3">Valoración</th>
+                            <th class="px-6 py-3">Opinión</th>
+                            <th class="px-6 py-3 text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @foreach($resenhas as $resenha)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4">
+                                    <img src="" alt="Cargando..." class="w-20 h-20 object-cover rounded-md" id="imagen-resenha-{{ $resenha->id }}">
+                                </td>
+                                <td class="px-6 py-4" id="titulo-{{ $resenha->id }}"></td>
+                                <td class="px-6 py-4">{{ $resenha->valoracion }}</td>
+                                <td class="px-6 py-4">{{ $resenha->opinion_texto }}</td>
+                                <td class="px-6 py-4 text-center">
+                                    <a href="{{ url('resenha/editar/'.$resenha->id) }}" class="text-blue-600 hover:text-blue-800">
+                                        Editar
+                                    </a>
+                                    <form action="{{ url('resenha/eliminar/'.$resenha->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-800 ml-4">
+                                            Eliminar
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    const tipo = '{{ $resenha->tipo_contenido }}'; // 'movie' o 'tv'
+                                    const id = '{{ $resenha->id_contenido }}';
+                                    const filaId = '{{ $resenha->id }}'; // ID único de la reseña
+
+                                    fetch(`https://api.themoviedb.org/3/${tipo}/${id}?language=es-ES`, {
+                                        method: 'GET',
+                                        headers: {
+                                            accept: 'application/json',
+                                            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4OGEzMjE5MTAxNTZiZWFlZWY1MzBlYzNhMmQxNTg5MSIsIm5iZiI6MTczODMxNjcyMS4yNjgsInN1YiI6IjY3OWM5YmIxODIyZTdkMzJmN2JkZTg2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.TnYuqSvLds-SafDDSVYFrCieAvhOqtG0kstT95IPt1s'
+                                        }
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const titulo = tipo === 'movie' ? data.title : data.name;
+                                        const imagen = data.poster_path
+                                            ? `https://image.tmdb.org/t/p/w500${data.poster_path}`
+                                            : 'https://via.placeholder.com/100x150?text=No+Imagen';
+
+                                        document.getElementById('titulo-' + filaId).innerText = titulo;
+                                        document.getElementById('imagen-resenha-' + filaId).src = imagen;
+                                    })
+                                    .catch(err => console.error('Error al obtener datos de TMDB:', err));
+                                });
+                            </script>
+                        @endforeach
+                    </tbody>
+                </table>
+                <div class="mt-6">
+                    {{ $resenhas->links() }}
+                </div>
+            </div>
+        @else
+            <p class="text-gray-500">No tienes reseñas disponibles.</p>
+        @endif
     </div>
 </div>
 
