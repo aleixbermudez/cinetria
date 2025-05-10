@@ -25,7 +25,7 @@
     auth()->check()
       ? [
       'name' => 'Mi Perfil',
-      'href' => "/perfil"
+      'href' => "/mi-perfil"
       ]
       : [
       'name' => 'Login',
