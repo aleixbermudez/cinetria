@@ -29,8 +29,8 @@
         @foreach($resenhas as $resenha)
         <div 
             class="reseña-card bg-white shadow-md rounded-lg overflow-hidden mb-6 border border-gray-200 hover:shadow-lg transition grid grid-cols-1 sm:grid-cols-[120px_1fr] gap-4"
-            data-tipo="{{ $resenha->tipo_contenido }}"
-            data-idtmdb="{{ $resenha->id_contenido }}"
+            data-tipo-contenido="{{ $resenha->tipo_contenido }}"
+            data-id-contenido="{{ $resenha->id_contenido }}"
             id="resenha-{{ $resenha->id }}"
         >
             <!-- Imagen -->
@@ -76,109 +76,36 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const token = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4OGEzMjE5MTAxNTZiZWFlZWY1MzBlYzNhMmQxNTg5MSIsIm5iZiI6MTczODMxNjcyMS4yNjgsInN1YiI6IjY3OWM5YmIxODIyZTdkMzJmN2JkZTg2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.TnYuqSvLds-SafDDSVYFrCieAvhOqtG0kstT95IPt1s';
+document.addEventListener("DOMContentLoaded", () => {
+    const reseñas = document.querySelectorAll('.reseña-card');
+    reseñas.forEach(reseña => {
+        var tipo = reseña.dataset.tipoContenido;
+        var idTmdb = reseña.dataset.idContenido;
 
-        const reseñas = document.querySelectorAll(".reseña-card");
-        reseñas.forEach(async (card) => {
-            const tipo = card.dataset.tipo;
-            const idTMDB = card.dataset.idtmdb;
-            const spanNombre = card.querySelector('.nombre-contenido');
-            const img = card.querySelector('img');
+        if (tipo === 'peliculas') tipo = 'movie';
+        if (tipo === 'series') tipo = 'tv';
+        fetch(`https://api.themoviedb.org/3/${tipo}/${idTmdb}?language=es-ES`, {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4OGEzMjE5MTAxNTZiZWFlZWY1MzBlYzNhMmQxNTg5MSIsIm5iZiI6MTczODMxNjcyMS4yNjgsInN1YiI6IjY3OWM5YmIxODIyZTdkMzJmN2JkZTg2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.TnYuqSvLds-SafDDSVYFrCieAvhOqtG0kstT95IPt1s'
+            }
+        })
+        .then(res => res.json())
+        .then(contentData => {
+            const nombreContenido = reseña.querySelector('.nombre-contenido');
+            const imagen = reseña.querySelector('img');
 
-            let url = '';
-            if (tipo === 'pelicula') {
-                url = `https://api.themoviedb.org/3/movie/${idTMDB}?language=es-ES`;
-            } else if (tipo === 'serie') {
-                url = `https://api.themoviedb.org/3/tv/${idTMDB}?language=es-ES`;
+            if (contentData.title || contentData.name) {
+                nombreContenido.textContent = contentData.title || contentData.name;
             }
 
-            try {
-                const response = await fetch(url, {
-                    headers: {
-                        accept: 'application/json',
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                const data = await response.json();
-                const nombre = data.title || data.name || 'Contenido desconocido';
-                const portada = data.poster_path ? `https://image.tmdb.org/t/p/w300${data.poster_path}` : '/images/portada_404.png';
-
-                spanNombre.textContent = nombre;
-                img.src = portada;
-                img.alt = nombre;
-            } catch (error) {
-                console.error('Error al obtener datos de TMDb:', error);
-                spanNombre.textContent = 'Error al cargar contenido';
+            if (contentData.poster_path) {
+                imagen.src = `https://image.tmdb.org/t/p/w500${contentData.poster_path}`;
             }
-        });
-
-        // --- Buscador ---
-        const buscador = document.querySelector('#buscador');
-        const resultadosDiv = document.querySelector('#resultados');
-        const contenedorReseñas = document.querySelector('#contenedor-reseñas');
-
-        buscador.addEventListener('keyup', async function () {
-            const query = buscador.value.trim();
-            if (!query) {
-                resultadosDiv.classList.add('hidden');
-                resultadosDiv.innerHTML = '';
-                mostrarTodasReseñas();
-                return;
-            }
-
-            try {
-                const response = await fetch(`https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(query)}&include_adult=false&language=es-ES&page=1`, {
-                    method: 'GET',
-                    headers: {
-                        accept: 'application/json',
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                const data = await response.json();
-                let html = '';
-
-                data.results.slice(0, 10).forEach(item => {
-                    const tipo = item.media_type === 'movie' ? 'pelicula'
-                                 : item.media_type === 'tv' ? 'serie'
-                                 : null;
-                    if (!tipo) return;
-
-                    const id = item.id;
-                    const nombre = item.title || item.name;
-                    const img = item.poster_path ? `https://image.tmdb.org/t/p/w92${item.poster_path}` : '/images/portada_404.png';
-
-                    html += `
-                        <div class="hover:bg-gray-100 cursor-pointer p-2">
-                            <div class="flex items-center gap-3" onclick="filtrarResenas('${tipo}', '${id}')">
-                                <img src="${img}" class="w-10 h-auto rounded shadow-sm" alt="${nombre}">
-                                <span class="text-sm font-medium text-gray-800">${nombre}</span>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                resultadosDiv.innerHTML = html;
-                resultadosDiv.classList.remove('hidden');
-            } catch (error) {
-                console.error('Error al buscar:', error);
-                resultadosDiv.innerHTML = '<p class="p-4 text-red-500">Error al cargar resultados</p>';
-                resultadosDiv.classList.remove('hidden');
-            }
-        });
-
-        window.filtrarResenas = (tipo, id) => {
-            reseñas.forEach(card => {
-                const cardTipo = card.dataset.tipo;
-                const cardId = card.dataset.idtmdb;
-                card.style.display = (cardTipo === tipo && cardId === id) ? 'grid' : 'none';
-            });
-            resultadosDiv.classList.add('hidden');
-        }
-
-        function mostrarTodasReseñas() {
-            reseñas.forEach(card => card.style.display = 'grid');
-        }
+        })
+        .catch(err => console.error('Error fetching content data:', err));
     });
+});
 </script>
 @endsection
