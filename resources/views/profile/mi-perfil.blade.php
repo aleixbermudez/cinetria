@@ -7,9 +7,6 @@
     <div class="flex items-center justify-between mb-8">
         <h1 class="text-3xl font-semibold text-gray-900">Mi Perfil</h1>
         <a href="{{ url('perfil/editar') }}" class="text-gray-600 hover:text-gray-800 transition-colors flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4V2m4 4l-1 1m-4 2l1-1m4 4l-1 1m-4 2l1-1m2 2l-1 1" />
-            </svg>
             Editar Perfil
         </a>
     </div>
@@ -23,7 +20,7 @@
         @if($resenhas->count())
             <div class="overflow-hidden bg-white rounded-lg shadow-md">
                 <table class="min-w-full text-sm text-left text-gray-700">
-                    <thead class="bg-indigo-600 text-white">
+                    <thead class="bg-amber-300 text-white">
                         <tr>
                             <th class="px-6 py-3">Imagen</th>
                             <th class="px-6 py-3">Título</th>
