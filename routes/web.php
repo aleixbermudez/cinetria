@@ -34,6 +34,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/resenha/eliminar/{id}'   , [ResenhaController::class, 'eliminarResenha'])->name('resenhas.eliminar');
     Route::get('/resenhas/nueva'          , [ResenhaController::class, 'nuevaResenha'])->name('resenhas.nueva');
     Route::post('/resenhas/nueva'         , [ResenhaController::class, 'crearResenha'])->name('resenhas.crear');
+
+    Route::get('/foro', [ResenhaController::class, 'foro'])->name('foro');
+    Route::get('/mis-favoritas', [FavoritasController::class, 'showFavoritas'])->name('mis.favoritas');
 });
 
 Route::post('/{tipo}/detalles/{id}/favorita', [FavoritasController::class, 'toggle'])->name('pelicula.favorita');
@@ -46,11 +49,6 @@ Route::get('/{tipo}', [ContenidoController::class, 'abrirPagina'])
     ->name('contenido');
 
 Route::get('/{tipo}/detalles/{id}', [ContenidoController::class, 'abrirPaginaDetalle']);
-
-Route::middleware('auth')->group(function () {
-    Route::get('/foro', [ResenhaController::class, 'foro'])->name('foro');
-
-});
 
 
 Route::middleware(['auth', 'role:admin'])->group(function () {

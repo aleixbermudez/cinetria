@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\Resenha;
+use App\Models\Favorita;
 use App\Models\User;
 
 class ProfileController extends Controller
@@ -67,13 +68,12 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         $resenhas = Resenha::where('id_usuario', $user->id)->paginate(4);
-
+        $favoritas = Favorita::where('id_usuario', $user->id)->get();
 
         return view('profile.mi-perfil', [
             'user' => $user,
             'resenhas' => $resenhas,
+            'favoritas' => $favoritas,
         ]);
-
-
     }
 }

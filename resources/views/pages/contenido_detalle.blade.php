@@ -235,5 +235,64 @@
                 });
             });
         });
+
+        document.getElementById('crear-resena-btn').addEventListener('click', function () {
+        // Verificamos si el usuario está logeado utilizando una variable global de PHP
+            @auth
+            Swal.fire({
+                title: '{{ $movie['titulo'] }}',
+                html: `
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 12px; overflow: hidden;">
+                    <form id="resena-form" action="{{ route('resenhas.crear') }}" method="POST" style="width: 100%;">
+                    @csrf
+                    <input type="hidden" name="id_contenido" value="{{ $movie['id'] }}">
+                    <input type="hidden" name="tipo_contenido" value="{{ $tipo }}">
+                    <textarea id="opinion_texto" name="opinion_texto" class="swal2-textarea" placeholder="¿Qué te ha parecido?" style="width: 80%; resize: none; height: 100px;"></textarea>
+                    <label for="valoracion" style="font-weight: 500;">Puntuación:</label>
+                    <input type="range" id="valoracion" name="valoracion" min="1" max="10" value="5" step="1" style="width: 100%; margin-bottom: 10px;">
+                    <div id="valor-valoracion" style="font-size: 16px; font-weight: bold; text-align: center; color: #4B5563;">5</div>
+                    </form>
+                </div>
+                `,
+                showCancelButton: true,
+                confirmButtonColor: '#10B981',
+                cancelButtonColor: '#EF4444',
+                confirmButtonText: 'Guardar reseña',
+                cancelButtonText: 'Cancelar',
+                focusConfirm: false,
+                preConfirm: () => {
+                const opinion_texto = document.getElementById('opinion_texto').value.trim();
+                const valoracion = document.getElementById('valoracion').value;
+
+                if (!opinion_texto || !valoracion) {
+                    Swal.showValidationMessage('Por favor, escribe una reseña y selecciona una puntuación.');
+                    return false;
+                }
+
+                // Submit the form
+                document.getElementById('resena-form').submit();
+                }
+            }).then(result => {
+                if (result.isConfirmed) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Reseña guardada!',
+                    text: 'Gracias por compartir tu opinión.',
+                    timer: 6500,
+                    showConfirmButton: false
+                });
+                console.log('Reseña:', result.value);
+                }
+            });
+
+            // Manejador de evento para mostrar el valor de la puntuación
+            document.getElementById('valoracion').addEventListener('input', function() {
+                document.getElementById('valor-valoracion').textContent = this.value;
+            });
+            @else
+            // Si el usuario no está logeado, redirige al login
+            window.location.href = '/login';
+            @endauth
+        });
     </script>
 @endsection

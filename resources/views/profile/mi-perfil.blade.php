@@ -5,6 +5,8 @@
 
 @include('components.hero-perfil')
 
+@include('components.slider-favoritas')
+
 <div class="max-w-4xl mx-auto mt-10 p-8 bg-white rounded-2xl shadow-lg">
     <div class="flex items-center justify-between mb-8">
         <h1 class="text-3xl font-semibold text-gray-900">{{ $user->name }}</h1>
