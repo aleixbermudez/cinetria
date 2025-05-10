@@ -10,6 +10,8 @@
             Editar Perfil
         </a>
     </div>
+<div class="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+
 
     <div class="mb-8">
         <h2 class="text-2xl font-semibold text-gray-900">{{ $user->name }}</h2>
