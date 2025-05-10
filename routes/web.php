@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ContenidoController;
+use App\Http\Controllers\ResenhaController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -27,6 +28,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/perfil/editar', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/perfil/editar', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/perfil', [ProfileController::class, 'index'])->name('perfil');
+
+    Route::get('/resenha/{id}'            , [ResenhaController::class, 'mostrarResenha'])->name('resenhas.mostrar');
+    Route::get('/resenha/modificar/{id}' ,  [ResenhaController::class, 'modificarResenha'])->name('resenhas.modificar');
+    Route::get('/resenha/eliminar/{id}'   , [ResenhaController::class, 'eliminarResenha'])->name('resenhas.eliminar');
+    Route::get('/resenhas/nueva'          , [ResenhaController::class, 'nuevaResenha'])->name('resenhas.nueva');
+    Route::post('/resenhas/nueva'         , [ResenhaController::class, 'crearResenha'])->name('resenhas.crear');
 });
 
 Route::post('/{tipo}/detalles/{id}/favorita', [FavoritasController::class, 'toggle'])->name('pelicula.favorita');

@@ -64,9 +64,26 @@
                         @endauth
 
                         {{-- Siempre se muestra el botón de "Crear Reseña", sin importar si está logeado --}}
-                        <button id="crear-resena-btn" class="mt-4 bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-2 px-5 rounded-full transition">
-                            Crear Reseña
-                        </button>
+                        @auth
+                            @if ($resenhaExistente)
+                                <p class="text-sm text-gray-700 dark:text-neutral-300">
+                                    Ya has creado una reseña. 
+                                    <b><a href="{{ route('perfil') }}" class="bold hover:underline">
+                                        Modifícala desde tu perfil
+                                    </a>.</b>
+                                </p>
+                            @else
+                                <button id="crear-resena-btn" class="mt-4 bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-2 px-5 rounded-full transition">
+                                    Crear Reseña
+                                </button>
+                            @endif
+                        @else
+                            <a href="/login">
+                                <button class="mt-4 bg-yellow-400 hover:bg-yellow-500 text-black font-medium py-2 px-5 rounded-full transition">
+                                    Crear Reseña
+                                </button>
+                            </a>
+                        @endauth
                     </div>
 
                     {{-- GSAP Animation --}}
@@ -169,14 +186,18 @@
         // Verificamos si el usuario está logeado utilizando una variable global de PHP
         @auth
             Swal.fire({
-                title: 'Escribe tu reseña',
+                title: '{{ $movie['titulo'] }}',
                 html: `
                     <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
-                        <input id="titulo" class="swal2-input" value="{{ $movie['titulo'] }}" disabled style="width: 100%; background-color: #f3f4f6; color: #6b7280; font-weight: 500;">
-                        <textarea id="contenido" class="swal2-textarea" placeholder="¿Qué te ha parecido?" style="width: 100%; resize: vertical;"></textarea>
-                        <label for="valoracion" style="font-weight: 500;">Puntuación:</label>
-                        <input type="range" id="valoracion" min="1" max="10" value="5" step="1" style="width: 100%; margin-bottom: 10px;">
-                        <div id="valor-valoracion" style="font-size: 16px; font-weight: bold; text-align: center; color: #4B5563;">5</div>
+                        <form id="resena-form" action="{{ route('resenhas.crear') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id_contenido" value="{{ $movie['id'] }}">
+                            <input type="hidden" name="tipo_contenido" value="{{ $tipo }}">
+                            <textarea id="opinion_texto" name="opinion_texto" class="swal2-textarea" placeholder="¿Qué te ha parecido?" style="width: 100%; resize: vertical;"></textarea>
+                            <label for="valoracion" style="font-weight: 500;">Puntuación:</label>
+                            <input type="range" id="valoracion" name="valoracion" min="1" max="10" value="5" step="1" style="width: 100%; margin-bottom: 10px;">
+                            <div id="valor-valoracion" style="font-size: 16px; font-weight: bold; text-align: center; color: #4B5563;">5</div>
+                        </form>
                     </div>
                 `,
                 showCancelButton: true,
@@ -186,20 +207,16 @@
                 cancelButtonText: 'Cancelar',
                 focusConfirm: false,
                 preConfirm: () => {
-                    const contenido = document.getElementById('contenido').value.trim();
+                    const opinion_texto = document.getElementById('opinion_texto').value.trim();
                     const valoracion = document.getElementById('valoracion').value;
 
-                    if (!contenido || !valoracion) {
+                    if (!opinion_texto || !valoracion) {
                         Swal.showValidationMessage('Por favor, escribe una reseña y selecciona una puntuación.');
                         return false;
                     }
 
-                    // Simulamos guardado
-                    return {
-                        titulo: '{{ $movie['titulo'] }}',
-                        contenido,
-                        valoracion
-                    };
+                    // Submit the form
+                    document.getElementById('resena-form').submit();
                 }
             }).then(result => {
                 if (result.isConfirmed) {
@@ -207,7 +224,7 @@
                         icon: 'success',
                         title: '¡Reseña guardada!',
                         text: 'Gracias por compartir tu opinión.',
-                        timer: 2500,
+                        timer: 6500,
                         showConfirmButton: false
                     });
                     console.log('Reseña:', result.value);

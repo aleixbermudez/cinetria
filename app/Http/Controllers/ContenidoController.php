@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Favorita;
+use App\Models\Resenha;
 use Illuminate\Support\Facades\Auth;
 
 class ContenidoController extends Controller
@@ -186,10 +187,16 @@ class ContenidoController extends Controller
                 $favorita = Favorita::where('id_usuario', Auth::id())
                                     ->where('id_contenido', $id)
                                     ->exists();
-                    
+                    $resenhaExistente = false;
+                    if (Auth::check()) {
+                        $resenhaExistente = Resenha::where('id_usuario', Auth::id())
+                                                               ->where('id_contenido', $id)
+                                                               ->exists();
+                        
+                    }
             }
             
-            return view('pages.contenido_detalle', compact('movie', 'tipo', 'favorita')); // Asegúrate de tener una vista 'contenido_detalle'
+            return view('pages.contenido_detalle', compact('movie', 'tipo', 'favorita', 'resenhaExistente')); // Asegúrate de tener una vista 'contenido_detalle'
         }
     }
 

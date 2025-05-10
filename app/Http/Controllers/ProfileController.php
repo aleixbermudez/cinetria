@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Resenha;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -64,11 +66,14 @@ class ProfileController extends Controller
     public function index(Request $request): View
     {
         $user = $request->user();
-        //$resenhas = $user->resenhas()->get();
+        $resenhas = Resenha::where('id_usuario', $user->id)->paginate(4);
+
 
         return view('profile.mi-perfil', [
             'user' => $user,
-            //'resenhas' => $resenhas,
+            'resenhas' => $resenhas,
         ]);
+
+
     }
 }
