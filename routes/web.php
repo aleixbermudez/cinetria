@@ -24,10 +24,10 @@ Route::get('/form', function () {
 })->name('form');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/perfil/editar', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/perfil/editar', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/perfil/editar', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/perfil', [ProfileController::class, 'index'])->name('perfil');
+    Route::get('/mi-perfil/editar', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/mi-perfil/editar', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/mi-perfil/editar', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/mi-perfil', [ProfileController::class, 'index'])->name('mi-perfil');
 
     Route::get('/resenha/{id}'            , [ResenhaController::class, 'mostrarResenha'])->name('resenhas.mostrar');
     Route::get('/resenha/modificar/{id}' ,  [ResenhaController::class, 'modificarResenha'])->name('resenhas.modificar');

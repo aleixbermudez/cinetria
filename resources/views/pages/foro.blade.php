@@ -16,6 +16,7 @@
                     type="text"
                     placeholder="Buscar película o serie..."
                     class="flex-grow px-4 py-2 text-sm rounded-lg bg-transparent text-gray-800 placeholder-gray-400 focus:outline-none"
+                    oninput="searchContent()"
                 />
             </div>
             <div id="resultados"
@@ -113,5 +114,24 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(err => console.error('Error fetching content data:', err));
     });
 });
+
+// Función de búsqueda en tiempo real
+function searchContent() {
+    const input = document.getElementById('buscador');
+    const query = input.value.toLowerCase();
+    const reseñas = document.querySelectorAll('.reseña-card');
+
+    reseñas.forEach(reseña => {
+        const contenidoNombre = reseña.querySelector('.nombre-contenido').textContent.toLowerCase();
+        const isMatch = contenidoNombre.includes(query);
+
+        if (isMatch) {
+            reseña.style.display = 'grid';  // Muestra el elemento si coincide
+        } else {
+            reseña.style.display = 'none';  // Oculta el elemento si no coincide
+        }
+    });
+}
 </script>
+
 @endsection

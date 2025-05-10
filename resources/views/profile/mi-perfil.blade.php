@@ -3,16 +3,17 @@
 
 @section('content')
 
+@include('components.hero-perfil')
+
 <div class="max-w-4xl mx-auto mt-10 p-8 bg-white rounded-2xl shadow-lg">
     <div class="flex items-center justify-between mb-8">
-        <h1 class="text-3xl font-semibold text-gray-900">Mi Perfil</h1>
-        <a href="{{ url('perfil/editar') }}" class="text-gray-600 hover:text-gray-800 transition-colors flex items-center">
+        <h1 class="text-3xl font-semibold text-gray-900">{{ $user->name }}</h1>
+        <a href="{{ url('mi-perfil/editar') }}" class="text-gray-600 hover:text-gray-800 transition-colors flex items-center">
             Editar Perfil
         </a>
     </div>
-<div class="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+<div class="max-w-4xl mx-auto mt-10 p-6 bg-white">
     <div class="mb-8">
-        <h2 class="text-2xl font-semibold text-gray-900">{{ $user->name }}</h2>
         <p class="text-gray-500">{{ $user->email }}</p>
     </div>
 
@@ -35,12 +36,12 @@
                                 data-tipo-contenido="{{ $resenha->tipo_contenido }}"
                                 data-id-contenido="{{ $resenha->id_contenido }}"
                                 id="resenha-{{ $resenha->id }}">
-                                <td class="border border-gray-300 px-4 py-2">
+                                <td class="px-4 py-2">
                                     <a href="/{{ $resenha->tipo_contenido }}/detalles/{{ $resenha->id_contenido }}" class="flex items-center gap-3">
                                         <img src="" alt="Cargando..." class="w-16 h-16 object-cover" id="imagen-resenha-{{ $resenha->id }}">
                                     </a>
                                 </td>
-                                <td class="border border-gray-300 px-4 py-2">
+                                <td class="px-4 py-2">
                                     <a href="/{{ $resenha->tipo_contenido }}/detalles/{{ $resenha->id_contenido }}" class="flex items-center gap-3">
                                         <span class="nombre-contenido" id="titulo-{{ $resenha->id }}"></span>
                                     </a>
