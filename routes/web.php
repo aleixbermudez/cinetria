@@ -58,18 +58,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         return view('pages.dashboard.dashboard');
     })->name('admin');
 
-    Route::middleware(['auth', 'role:admin'])->group(function () {
-        Route::get('/admin/users', [DashboardController::class, 'ListaUsuarios'])->name('admin-users');
-    });
 
+    Route::get('/admin/users', [DashboardController::class, 'ListaUsuarios'])->name('admin-users');
     Route::put('/admin/users/edit/{user}', [DashboardController::class, 'update']);
-
-    Route::get('/admin/resenhas/a', function () {
-        return view('pages.dashboard.resenhas');
-    })->name('admin-resenhas');
-
     Route::delete('/admin/users/delete/{id}', [DashboardController::class, 'delete'])->name('users.delete');
 
+
+
+    Route::get('/admin/resenhas', [DashboardController::class, 'ListaResenhas'])->name('admin-resenhas');
+    Route::put('/admin/resenhas/edit/{resenha}', [DashboardController::class, 'updateResenha']);
+    Route::delete('/admin/resenhas/delete/{id}', [DashboardController::class, 'deleteResenha']);
 });
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
