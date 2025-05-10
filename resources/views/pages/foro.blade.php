@@ -35,7 +35,9 @@
         >
             <!-- Imagen -->
             <div class="w-full sm:w-[120px] h-[180px] sm:h-auto">
-                <img class="w-full h-full object-cover" src="/images/portada_404.png" alt="Portada" loading="lazy">
+                <a href="/{{ $resenha->tipo_contenido }}/detalles/{{ $resenha->id_contenido }}" class="flex items-center gap-3">
+                    <img class="w-full h-full object-cover" src="/images/portada_404.png" alt="Portada" loading="lazy">
+                </a>
             </div>
 
             <!-- Contenido -->
@@ -43,8 +45,12 @@
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <div class="text-sm text-gray-500">
-                            <span class="font-semibold">{{ $resenha->usuario->name ?? 'Usuario desconocido' }}</span> opinó sobre 
-                            <span class="text-indigo-600 font-medium nombre-contenido" data-default="Cargando...">Cargando...</span>
+                            <a href="/perfil/{{ $resenha->usuario->name }}" class="text-gray-800 hover:text-indigo-600">
+                                <span class="font-semibold">{{ $resenha->usuario->name ?? 'Usuario desconocido' }}</span> opinó sobre
+                            </a>
+                            <a href="/{{ $resenha->tipo_contenido }}/detalles/{{ $resenha->id_contenido }}" class="text-gray-800 hover:text-indigo-600">
+                                <span class="text-indigo-600 font-medium nombre-contenido" data-default="Cargando...">Cargando...</span>
+                            </a>
                         </div>
                         <div class="flex items-center gap-1 text-yellow-400">
                             @for ($i = 1; $i <= 5; $i++)

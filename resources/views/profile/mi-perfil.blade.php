@@ -19,39 +19,53 @@
                 </thead>
                 <tbody>
                     @foreach($resenhas as $resenha)
-                        <tr>
+                        <tr class="reseña-card bg-white shadow-md rounded-lg overflow-hidden mb-6 border border-gray-200 hover:shadow-lg transition grid grid-cols-1 sm:grid-cols-[120px_1fr] gap-4"
+                            data-tipo-contenido="{{ $resenha->tipo_contenido }}"
+                            data-id-contenido="{{ $resenha->id_contenido }}"
+                            id="resenha-{{ $resenha->id }}">
                             <td class="border border-gray-300 px-4 py-2">
-                                <img src="" alt="Cargando..." class="w-16 h-16 object-cover" id="imagen-resenha-{{ $resenha->id }}">
+                                <a href="/{{ $resenha->tipo_contenido }}/detalles/{{ $resenha->id_contenido }}" class="flex items-center gap-3">
+                                    <img src="" alt="Cargando..." class="w-16 h-16 object-cover" id="imagen-resenha-{{ $resenha->id }}">
+                                </a>
                             </td>
-                            <td class="border border-gray-300 px-4 py-2" id="titulo-{{ $resenha->id }}"></td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a href="/{{ $resenha->tipo_contenido }}/detalles/{{ $resenha->id_contenido }}" class="flex items-center gap-3">
+                                    <span class="nombre-contenido" id="titulo-{{ $resenha->id }}"></span>
+                                </a>
+                            </td>
                             <td class="border border-gray-300 px-4 py-2">{{ $resenha->valoracion }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $resenha->opinion_texto }}</td>
                         </tr>
                         <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                const tipo = '{{ $resenha->tipo_contenido }}'; // 'movie' o 'tv'
-                                const id = '{{ $resenha->id_contenido }}';
-                                const filaId = '{{ $resenha->id }}'; // ID único de la reseña
+                        document.addEventListener("DOMContentLoaded", () => {
+                            const reseñas = document.querySelectorAll('.reseña-card');
+                            reseñas.forEach(reseña => {
+                                const tipo = reseña.dataset.tipoContenido === 'peliculas' ? 'movie' : 'tv';
+                                const idTmdb = reseña.dataset.idContenido;
 
-                                fetch(`https://api.themoviedb.org/3/${tipo}/${id}?language=es-ES`, {
+                                fetch(`https://api.themoviedb.org/3/${tipo}/${idTmdb}?language=es-ES`, {
                                     method: 'GET',
                                     headers: {
                                         accept: 'application/json',
                                         Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4OGEzMjE5MTAxNTZiZWFlZWY1MzBlYzNhMmQxNTg5MSIsIm5iZiI6MTczODMxNjcyMS4yNjgsInN1YiI6IjY3OWM5YmIxODIyZTdkMzJmN2JkZTg2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.TnYuqSvLds-SafDDSVYFrCieAvhOqtG0kstT95IPt1s'
                                     }
                                 })
-                                .then(response => response.json())
-                                .then(data => {
-                                    const titulo = tipo === 'movie' ? data.title : data.name;
-                                    const imagen = data.poster_path
-                                        ? `https://image.tmdb.org/t/p/w500${data.poster_path}`
-                                        : 'https://via.placeholder.com/100x150?text=No+Imagen';
+                                .then(res => res.json())
+                                .then(contentData => {
+                                    const nombreContenido = reseña.querySelector('.nombre-contenido');
+                                    const imagen = reseña.querySelector('img');
 
-                                    document.getElementById('titulo-' + filaId).innerText = titulo;
-                                    document.getElementById('imagen-resenha-' + filaId).src = imagen;
+                                    if (contentData.title || contentData.name) {
+                                        nombreContenido.textContent = contentData.title || contentData.name;
+                                    }
+
+                                    if (contentData.poster_path) {
+                                        imagen.src = `https://image.tmdb.org/t/p/w500${contentData.poster_path}`;
+                                    }
                                 })
-                                .catch(err => console.error('Error al obtener datos de TMDB:', err));
+                                .catch(err => console.error('Error fetching content data:', err));
                             });
+                        });
                         </script>
                     @endforeach
                 </tbody>
