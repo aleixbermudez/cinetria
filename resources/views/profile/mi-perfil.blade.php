@@ -3,9 +3,14 @@
 
 @section('content')
 
+<div class="max-w-4xl mx-auto mt-10 p-8 bg-white rounded-2xl shadow-lg">
+    <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-semibold text-gray-900">Mi Perfil</h1>
+        <a href="{{ url('perfil/editar') }}" class="text-gray-600 hover:text-gray-800 transition-colors flex items-center">
+            Editar Perfil
+        </a>
+    </div>
 <div class="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-
-
     <div class="mb-8">
         <h2 class="text-2xl font-semibold text-gray-900">{{ $user->name }}</h2>
         <p class="text-gray-500">{{ $user->email }}</p>
@@ -26,52 +31,31 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         @foreach($resenhas as $resenha)
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4">
-                                    <img src="" alt="Cargando..." class="w-20 h-20 object-cover rounded-md" id="imagen-resenha-{{ $resenha->id }}">
+                            <tr class="hover:bg-gray-50"
+                                data-tipo-contenido="{{ $resenha->tipo_contenido }}"
+                                data-id-contenido="{{ $resenha->id_contenido }}"
+                                id="resenha-{{ $resenha->id }}">
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <a href="/{{ $resenha->tipo_contenido }}/detalles/{{ $resenha->id_contenido }}" class="flex items-center gap-3">
+                                        <img src="" alt="Cargando..." class="w-16 h-16 object-cover" id="imagen-resenha-{{ $resenha->id }}">
+                                    </a>
                                 </td>
-                                <td class="px-6 py-4" id="titulo-{{ $resenha->id }}"></td>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <a href="/{{ $resenha->tipo_contenido }}/detalles/{{ $resenha->id_contenido }}" class="flex items-center gap-3">
+                                        <span class="nombre-contenido" id="titulo-{{ $resenha->id }}"></span>
+                                    </a>
+                                </td>
                                 <td class="px-6 py-4">{{ $resenha->valoracion }}</td>
                                 <td class="px-6 py-4">{{ $resenha->opinion_texto }}</td>
                                 <td class="px-6 py-4 text-center">
-                                    <a href="{{ url('resenha/editar/'.$resenha->id) }}" class="text-blue-600 hover:text-blue-800">
-                                        Editar
-                                    </a>
+                                    <a href="{{ url('resenha/editar/'.$resenha->id) }}" class="text-blue-600 hover:text-blue-800">Editar</a>
                                     <form action="{{ url('resenha/eliminar/'.$resenha->id) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-800 ml-4">
-                                            Eliminar
-                                        </button>
+                                        <button type="submit" class="text-red-600 hover:text-red-800 ml-4">Eliminar</button>
                                     </form>
                                 </td>
                             </tr>
-                            <script>
-                                document.addEventListener('DOMContentLoaded', function () {
-                                    const tipo = '{{ $resenha->tipo_contenido }}'; // 'movie' o 'tv'
-                                    const id = '{{ $resenha->id_contenido }}';
-                                    const filaId = '{{ $resenha->id }}'; // ID único de la reseña
-
-                                    fetch(`https://api.themoviedb.org/3/${tipo}/${id}?language=es-ES`, {
-                                        method: 'GET',
-                                        headers: {
-                                            accept: 'application/json',
-                                            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4OGEzMjE5MTAxNTZiZWFlZWY1MzBlYzNhMmQxNTg5MSIsIm5iZiI6MTczODMxNjcyMS4yNjgsInN1YiI6IjY3OWM5YmIxODIyZTdkMzJmN2JkZTg2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.TnYuqSvLds-SafDDSVYFrCieAvhOqtG0kstT95IPt1s'
-                                        }
-                                    })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        const titulo = tipo === 'movie' ? data.title : data.name;
-                                        const imagen = data.poster_path
-                                            ? `https://image.tmdb.org/t/p/w500${data.poster_path}`
-                                            : 'https://via.placeholder.com/100x150?text=No+Imagen';
-
-                                        document.getElementById('titulo-' + filaId).innerText = titulo;
-                                        document.getElementById('imagen-resenha-' + filaId).src = imagen;
-                                    })
-                                    .catch(err => console.error('Error al obtener datos de TMDB:', err));
-                                });
-                            </script>
                         @endforeach
                     </tbody>
                 </table>
@@ -84,5 +68,39 @@
         @endif
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const filas = document.querySelectorAll('tr[data-tipo-contenido]');
+
+    filas.forEach(fila => {
+        let tipo = fila.dataset.tipoContenido;
+        const idTmdb = fila.dataset.idContenido;
+
+        // Traducir a lo que TMDB espera
+        tipo = tipo === 'peliculas' ? 'movie' : 'tv';
+
+        fetch(`https://api.themoviedb.org/3/${tipo}/${idTmdb}?language=es-ES`, {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4OGEzMjE5MTAxNTZiZWFlZWY1MzBlYzNhMmQxNTg5MSIsIm5iZiI6MTczODMxNjcyMS4yNjgsInN1YiI6IjY3OWM5YmIxODIyZTdkMzJmN2JkZTg2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.TnYuqSvLds-SafDDSVYFrCieAvhOqtG0kstT95IPt1s'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            const nombre = data.title || data.name || 'Desconocido';
+            const poster = data.poster_path ? `https://image.tmdb.org/t/p/w500${data.poster_path}` : '';
+
+            const tituloEl = fila.querySelector('.nombre-contenido');
+            const imagenEl = fila.querySelector('img');
+
+            if (tituloEl) tituloEl.textContent = nombre;
+            if (imagenEl && poster) imagenEl.src = poster;
+        })
+        .catch(err => console.error('Error al obtener datos de TMDB:', err));
+    });
+});
+</script>
 
 @endsection
