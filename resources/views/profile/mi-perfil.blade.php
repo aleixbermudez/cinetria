@@ -9,7 +9,7 @@
 <div class="max-w-4xl mx-auto mt-10 p-8 bg-white rounded-2xl shadow-lg">
     <div class="flex items-center justify-between mb-8">
         <h1 class="text-3xl font-semibold text-gray-900">{{ $user->name }}</h1>
-        <a href="{{ url('mi-perfil/editar') }}" class="text-gray-600 hover:text-gray-800 transition-colors flex items-center">
+        <a href="{{ url('mi-perfil/editar') }}" class="bg-blue-700 text-white hover:bg-yellow-400 hover:text-gray-800 transition-colors flex items-center px-4 py-2 rounded-lg">
             Editar Perfil
         </a>
     </div>
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer TU_TOKEN_AQUI'
+                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4OGEzMjE5MTAxNTZiZWFlZWY1MzBlYzNhMmQxNTg5MSIsIm5iZiI6MTczODMxNjcyMS4yNjgsInN1YiI6IjY3OWM5YmIxODIyZTdkMzJmN2JkZTg2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.TnYuqSvLds-SafDDSVYFrCieAvhOqtG0kstT95IPt1s'
             }
         })
         .then(res => res.json())
