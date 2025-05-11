@@ -61,6 +61,37 @@ class ResenhaController extends Controller
         $resenhas = Resenha::with('usuario')->latest()->get(); // Asume que tienes relación con User
         return view('pages.foro', compact('resenhas'));
     }
+
+
+    public function destroy($id)
+    {
+        $resenha = Resenha::findOrFail($id);
+        $resenha->delete();
+
+        return response()->json(['message' => 'Reseña eliminada correctamente.']);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $resenha = Resenha::findOrFail($id);
+
+        $request->validate([
+            'valoracion' => 'required|numeric|min:0|max:10',
+            'opinion_texto' => 'required|string',
+            'tipo_contenido' => 'required|string|in:peliculas,series',
+        ]);
+
+        $resenha->valoracion = $request->valoracion;
+        $resenha->opinion_texto = $request->opinion_texto;
+        $resenha->tipo_contenido = $request->tipo_contenido;
+        $resenha->save();
+
+        return response()->json(['message' => 'Reseña actualizada correctamente.']);
+    }
+
+
+
+    
     // Opciones para crear, modificar, eliminar o mostrar reseñas ( CRUD)
     function mostrarResenha($id)
     {

@@ -4,17 +4,15 @@
 @section('content')
 
 @include('components.hero-perfil')
-
 @include('components.slider-favoritas')
 
 <div class="max-w-4xl mx-auto mt-10 p-8 bg-white rounded-2xl shadow-lg">
     <div class="flex items-center justify-between mb-8">
         <h1 class="text-3xl font-semibold text-gray-900">{{ $user->name }}</h1>
-        <a href="{{ url('mi-perfil/editar') }}" class="text-gray-600 hover:text-gray-800 transition-colors flex items-center">
-            Editar Perfil
-        </a>
+        <a href="/mi-perfil/editar">Editar perfil</a>
+        
     </div>
-<div class="max-w-4xl mx-auto mt-10 p-6 bg-white">
+
     <div class="mb-8">
         <p class="text-gray-500">{{ $user->email }}</p>
     </div>
@@ -51,12 +49,27 @@
                                 <td class="px-6 py-4">{{ $resenha->valoracion }}</td>
                                 <td class="px-6 py-4">{{ $resenha->opinion_texto }}</td>
                                 <td class="px-6 py-4 text-center">
-                                    <a href="{{ url('resenha/editar/'.$resenha->id) }}" class="text-blue-600 hover:text-blue-800">Editar</a>
-                                    <form action="{{ url('resenha/eliminar/'.$resenha->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-800 ml-4">Eliminar</button>
-                                    </form>
+                                    <button 
+                                        onclick="editResenha(
+                                            '{{ $resenha->id }}',
+                                            '{{ $user->name }}',
+                                            '{{ $user->email }}',
+                                            '{{ $resenha->valoracion }}',
+                                            `{{ $resenha->opinion_texto }}`,
+                                            '{{ $resenha->tipo_contenido }}',
+                                            '{{ $resenha->created_at }}'
+                                        )"
+                                        class="text-blue-600 hover:text-blue-800"
+                                    >
+                                        Editar
+                                    </button>
+
+                                    <button 
+                                        onclick="deleteResenha('{{ $resenha->id }}')"
+                                        class="text-red-600 hover:text-red-800 ml-4"
+                                    >
+                                        Eliminar
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
@@ -72,38 +85,139 @@
     </div>
 </div>
 
+<!-- Include SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const filas = document.querySelectorAll('tr[data-tipo-contenido]');
-
     filas.forEach(fila => {
         let tipo = fila.dataset.tipoContenido;
         const idTmdb = fila.dataset.idContenido;
-
-        // Traducir a lo que TMDB espera
         tipo = tipo === 'peliculas' ? 'movie' : 'tv';
 
         fetch(`https://api.themoviedb.org/3/${tipo}/${idTmdb}?language=es-ES`, {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4OGEzMjE5MTAxNTZiZWFlZWY1MzBlYzNhMmQxNTg5MSIsIm5iZiI6MTczODMxNjcyMS4yNjgsInN1YiI6IjY3OWM5YmIxODIyZTdkMzJmN2JkZTg2MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.TnYuqSvLds-SafDDSVYFrCieAvhOqtG0kstT95IPt1s'
+                Authorization: 'Bearer TU_TOKEN_AQUI'
             }
         })
         .then(res => res.json())
         .then(data => {
             const nombre = data.title || data.name || 'Desconocido';
             const poster = data.poster_path ? `https://image.tmdb.org/t/p/w500${data.poster_path}` : '';
-
             const tituloEl = fila.querySelector('.nombre-contenido');
             const imagenEl = fila.querySelector('img');
-
             if (tituloEl) tituloEl.textContent = nombre;
             if (imagenEl && poster) imagenEl.src = poster;
         })
         .catch(err => console.error('Error al obtener datos de TMDB:', err));
     });
 });
+
+function deleteResenha(id) {
+    Swal.fire({
+        title: '¿Seguro que quieres eliminar esta reseña?',
+        text: "¡No podrás revertir esta acción!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+        focusConfirm: false,
+        customClass: {
+            popup: 'text-left'
+        },
+        preConfirm: () => {
+            return fetch(`/mi-perfil/resenhas/delete/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('No se pudo eliminar la reseña');
+                return response.json();
+            })
+            .then(() => {
+                Swal.fire('Eliminada', 'La reseña ha sido eliminada correctamente.', 'success')
+                    .then(() => location.reload());
+            })
+            .catch(err => {
+                Swal.showValidationMessage(`Error: ${err.message}`);
+            });
+        }
+    });
+}
+
+function editResenha(id, name, email, valoracion, opinionTexto, tipoContenido, createdAt) {
+    Swal.fire({
+        title: 'Editar Reseña',
+        html: `
+            <div style="display: flex; flex-direction: column; gap: 1rem; text-align: left;">
+                <label>Nombre del autor</label>
+                <input id="swal-name" class="swal2-input" value="${name}" disabled>
+
+                <label>Email del autor</label>
+                <input id="swal-email" class="swal2-input" value="${email}" disabled>
+
+                <label>Valoración</label>
+                <input id="swal-valoracion" class="swal2-input" value="${valoracion}">
+
+                <label>Texto de la opinión</label>
+                <textarea id="swal-opinion" class="swal2-textarea">${opinionTexto}</textarea>
+
+                <label>Tipo de contenido</label>
+                <input id="swal-tipo" class="swal2-input" value="${tipoContenido}">
+
+                <label>Fecha de reseña</label>
+                <input id="swal-created" class="swal2-input" value="${createdAt}" disabled>
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Guardar cambios',
+        cancelButtonText: 'Cancelar',
+        focusConfirm: false,
+        customClass: {
+            popup: 'text-left'
+        },
+        preConfirm: () => {
+            const newValoracion = document.getElementById('swal-valoracion').value.trim();
+            const newOpinionTexto = document.getElementById('swal-opinion').value.trim();
+            const newTipoContenido = document.getElementById('swal-tipo').value.trim();
+
+            if (!newValoracion || !newOpinionTexto || !newTipoContenido) {
+                Swal.showValidationMessage('Todos los campos deben estar completos');
+                return false;
+            }
+
+            return fetch(`/mi-perfil/resenhas/edit/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    valoracion: newValoracion,
+                    opinion_texto: newOpinionTexto,
+                    tipo_contenido: newTipoContenido
+                })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('No se pudo actualizar la reseña');
+                return response.json();
+            })
+            .then(() => {
+                Swal.fire('Actualizada', 'La reseña ha sido modificada correctamente.', 'success')
+                    .then(() => location.reload());
+            })
+            .catch(err => {
+                Swal.showValidationMessage(`Error: ${err.message}`);
+            });
+        }
+    });
+}
 </script>
 
 @endsection
