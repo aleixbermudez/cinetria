@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Resenha;
 
 class User extends Authenticatable
 {
@@ -46,4 +47,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    // En User.php
+    public function resenhas()
+    {
+        return $this->hasMany(Resenha::class, 'id_usuario');
+    }
+
 }

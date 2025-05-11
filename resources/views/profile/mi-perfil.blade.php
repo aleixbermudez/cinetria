@@ -9,10 +9,11 @@
 <div class="max-w-4xl mx-auto mt-10 p-8 bg-white rounded-2xl shadow-lg">
     <div class="flex items-center justify-between mb-8">
         <h1 class="text-3xl font-semibold text-gray-900">{{ $user->name }}</h1>
-        <a href="/mi-perfil/editar">Editar perfil</a>
-        
+        <a href="{{ url('mi-perfil/editar') }}" class="text-gray-600 hover:text-gray-800 transition-colors flex items-center">
+            Editar Perfil
+        </a>
     </div>
-
+<div class="max-w-4xl mx-auto mt-10 p-6 bg-white">
     <div class="mb-8">
         <p class="text-gray-500">{{ $user->email }}</p>
     </div>

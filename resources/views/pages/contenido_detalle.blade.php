@@ -282,7 +282,57 @@
                     showConfirmButton: false
                 });
                 console.log('Reseña:', result.value);
+
+            const form = this;
+            const likeBtn = document.getElementById('likeBtn');
+            const isFavorited = likeBtn.querySelector('svg').classList.contains('text-red-500');
+            
+            // Realizamos la petición AJAX
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Si se añadió a favoritos
+                if (data.status === 'added') {
+                    if (!isFavorited) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Añadido correctamente!',
+                            text: 'La película ha sido añadida a tus favoritos.',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    }
+                    likeBtn.querySelector('svg').classList.replace('text-gray-500', 'text-red-500');
+                } 
+                // Si se quitó de favoritos
+                else if (data.status === 'removed') {
+                    if (isFavorited) {
+                        Swal.fire({
+                            icon: 'warning',  // Cambio de success a warning
+                            title: '¡Eliminado correctamente!',
+                            text: 'La película ha sido eliminada de tus favoritos.',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            imageUrl: 'https://img.icons8.com/ios/452/trash.png', // Icono de basura
+                            imageWidth: 50,
+                            imageHeight: 50,
+                            imageAlt: 'Basura icono',
+                        });
+                    }
+                    likeBtn.querySelector('svg').classList.replace('text-red-500', 'text-gray-500');
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: '¡Error!',
+                    text: 'Hubo un problema al procesar tu solicitud.',
+                    showConfirmButton: true
+                });
             });
 
             // Manejador de evento para mostrar el valor de la puntuación

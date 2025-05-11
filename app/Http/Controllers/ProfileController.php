@@ -61,9 +61,7 @@ class ProfileController extends Controller
         return Redirect::to('/');
     }
 
-    /**
-     * Display the user's profile.
-     */
+
     public function index(Request $request): View
     {
         $user = $request->user();
@@ -75,5 +73,14 @@ class ProfileController extends Controller
             'resenhas' => $resenhas,
             'favoritas' => $favoritas,
         ]);
+    }
+
+    public function show($username)
+    {
+        $user = User::where('name', $username)->firstOrFail();
+
+        $resenhas = $user->resenhas()->latest()->paginate(5); // Asumiendo relación hasMany
+
+        return view('pages.perfil_ajeno', compact('user', 'resenhas'));
     }
 }
