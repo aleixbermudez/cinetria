@@ -7,5 +7,8 @@ export default defineConfig({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
         }),
-    ]
+    ],
+    build: {
+        outDir: 'public/build',  // Asegúrate de que la salida sea a la carpeta public/build
+    },
 });
