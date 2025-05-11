@@ -39,6 +39,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/mi-perfil/editar', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/mi-perfil', [ProfileController::class, 'index'])->name('mi-perfil');
 
+    Route::get('/perfil/{nombre}', [ProfileController::class, 'ver_perfil_ajeno'])->name('perfil_ajeno');
+
     Route::get('/resenha/{id}'            , [ResenhaController::class, 'mostrarResenha'])->name('resenhas.mostrar');
     Route::get('/resenha/modificar/{id}' ,  [ResenhaController::class, 'modificarResenha'])->name('resenhas.modificar');
     Route::get('/resenha/eliminar/{id}'   , [ResenhaController::class, 'eliminarResenha'])->name('resenhas.eliminar');

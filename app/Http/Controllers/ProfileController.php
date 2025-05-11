@@ -75,7 +75,7 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function show($username)
+    public function ver_perfil_ajeno($username)
     {
         $user = User::where('name', $username)->firstOrFail();
 
