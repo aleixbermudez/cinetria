@@ -6,6 +6,9 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('images/logo.png') }}">
     <link rel="stylesheet" href={{ asset('style.css') }}>
 
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.24/dist/tailwind.min.css" rel="stylesheet">
+
+
 
     <!-- Otros metadatos -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
