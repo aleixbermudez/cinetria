@@ -1,6 +1,6 @@
 <div class="flex flex-col md:flex-row justify-center gap-8 px-4 md:px-0 max-w-7xl mx-auto mt-8">
     <!-- Sidebar de filtros -->
-    <aside class="w-full md:w-64 bg-white rounded-2xl shadow-sm p-6 sticky top-4 self-start border border-gray-200">
+    <aside class="w-full md:w-64 bg-white rounded-2xl shadow-sm p-6 md:sticky top-4 self-start border border-gray-200">
         <h3 class="text-lg font-semibold mb-4 text-gray-800">Filtrar por géneros</h3>
 
         <div class="generos-container flex flex-wrap gap-2" id="generos-container">
